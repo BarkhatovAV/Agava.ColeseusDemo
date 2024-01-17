@@ -1,20 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ColyseusDemo.Multiplayer
 {
     public class PlayerSettings : MonoBehaviour
     {
+        //Для чего статичный модификатор?
         public static PlayerSettings Instance { get; private set; }
+
+        public string Login { get; private set; }
 
         private void Awake()
         {
             if (Instance)
             {
                 Destroy(gameObject);
-                return;
+                return; //А почему именно return, а не блок else для кода далее?
             }
+
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
@@ -24,12 +26,9 @@ namespace ColyseusDemo.Multiplayer
             if (Instance == this) Instance = null;
         }
 
-        public string Login { get; private set; }
-
         internal void SetLogin(string login)
         {
             Login = login;
         }
-
     }
 }

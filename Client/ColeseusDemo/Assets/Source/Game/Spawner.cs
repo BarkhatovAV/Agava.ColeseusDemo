@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using ColyseusDemo.Multiplayer;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UI;
-using ColyseusDemo.Multiplayer;
-using Colyseus;
 
 namespace ColyseusDemo.Game
 {
@@ -14,7 +11,8 @@ namespace ColyseusDemo.Game
         [SerializeField] private Button _button;
         [SerializeField] private GameObject _gameObject;
 
-        private float _posX = -8.75f;
+        private float _positionX = -8.75f;
+        private bool _isSpawnReady;
 
         private void OnEnable()
         {
@@ -29,10 +27,19 @@ namespace ColyseusDemo.Game
 
         private void OnClick()
         {
-            Vector3 pos = new Vector3(_posX, 0, 6);
-            _posX += 2.5f;
-            Instantiate(_gameObject, pos, Quaternion.identity);
-            SendSpawn(_gameObject.name, pos);
+            if (_isSpawnReady)
+            {
+                Vector3 ballSpawnPosition = new Vector3(_positionX, 0, 6);
+
+                SetNewBall(ballSpawnPosition);
+                SendSpawn(_gameObject.name, ballSpawnPosition);
+            }
+        }
+
+        private void SetNewBall(Vector3 ballSpawnPosition)
+        {
+            _positionX += 2.5f;
+            Instantiate(_gameObject, ballSpawnPosition, Quaternion.identity);
         }
 
         private void SendSpawn(string id, Vector3 spawnPoint)

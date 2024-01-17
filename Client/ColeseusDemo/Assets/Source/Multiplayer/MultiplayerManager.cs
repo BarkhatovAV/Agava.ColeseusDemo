@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Colyseus;
 using System;
+using System.Collections.Generic;
+using Colyseus;
 using TMPro;
+using UnityEngine;
 
 namespace ColyseusDemo.Multiplayer
 {
@@ -14,6 +13,7 @@ namespace ColyseusDemo.Multiplayer
 
         private const string GameRoomName = "state_handler";
         private const string SpawnName = "spawn";
+        private const string TurnReady = "turnReady";
 
         private ColyseusRoom<State> _room;
 
@@ -29,7 +29,6 @@ namespace ColyseusDemo.Multiplayer
             Connection();
         }
 
-
         private void OnDestroy()
         {
             base.OnDestroy();
@@ -38,15 +37,14 @@ namespace ColyseusDemo.Multiplayer
 
         private async void Connection()
         {
-
             Dictionary<string, object> data = new Dictionary<string, object>()
             {
                 {"login", PlayerSettings.Instance.Login }
             };
+
             _room = await client.JoinOrCreate<State>(GameRoomName, data);
             _room.OnMessage<string>(SpawnName, jsonSpawnData => OnSpawnUnit?.Invoke(jsonSpawnData));
             _room.OnStateChange += OnChange;
-
         }
 
         private void OnChange(State state, bool isFirstState) //ќбновл€етс€ при изменении состони€ комнаты
@@ -54,14 +52,15 @@ namespace ColyseusDemo.Multiplayer
             //if (isFirstState == false)
             //    return;
 
-
             state.players.ForEach((key, player) =>
             {
                 print(player.login);
-                if (key == _room.SessionId) CreatePlayer(player);
-                else CreateEnemy(key, player);
-            });
 
+                if (key == _room.SessionId)
+                    CreatePlayer(player);
+                else
+                    CreateEnemy(key, player);
+            });
         }
 
         private void CreateEnemy(string key, Player player)
@@ -77,6 +76,11 @@ namespace ColyseusDemo.Multiplayer
         public void SendMessage(string key, Dictionary<string, object> data)
         {
             _room.Send(key, data);
+        }
+
+        public void SendMessage(string key, int value) 
+        {
+            _room.Send(key, value);
         }
 
         public void Leave()
