@@ -1,0 +1,18 @@
+{
+    "name": "ColyseusDemo.TurnEnding",
+    "rootNamespace": "ColyseusDemo.TurnEnding",
+    "references": [
+        "GUID:1a8902c9be8fecf46bc9a6209dcf4c0f",
+        "GUID:7d8788162c0190c4c8b801543ada1607",
+        "GUID:d0b0e402775693d4bab8ff5b8271db60"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

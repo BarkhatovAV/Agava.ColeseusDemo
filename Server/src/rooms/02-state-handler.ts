@@ -2,7 +2,8 @@ import { Room, Client } from "colyseus";
 import { Schema, type, MapSchema } from "@colyseus/schema";
 
 export class Player extends Schema {
-    @type("string") login = "";
+    @type("string") login = ""
+    @type("uint32") isPlayerTurnReady;
 }
 
 export class State extends Schema {

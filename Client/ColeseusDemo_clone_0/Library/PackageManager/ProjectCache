@@ -5,7 +5,7 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638410425607444705
+      ticks: 638410425542828849
     m_Hash: 3223559890
   m_LockFileStatus:
     m_FilePath: C:/Unity Projects/Agava.ColeseusDemo/Client/ColeseusDemo_clone_0/Packages/packages-lock.json
@@ -13,8 +13,8 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638410425607454711
-    m_Hash: 222231062
+      ticks: 638410614235190574
+    m_Hash: 907266460
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -834,9 +834,9 @@ m_ResolvedPackages:
 - packageId: io.colyseus.sdk@https://github.com/colyseus/colyseus-unity3d.git#upm
   testable: 0
   isDirectDependency: 1
-  version: 0.15.7
+  version: 0.15.8
   source: 5
-  resolvedPath: C:\Unity Projects\Agava.ColeseusDemo\Client\ColeseusDemo_clone_0\Library\PackageCache\io.colyseus.sdk@b09e1372cd
+  resolvedPath: C:\Unity Projects\Agava.ColeseusDemo\Client\ColeseusDemo_clone_0\Library\PackageCache\io.colyseus.sdk@0991d1960f
   assetPath: Packages/io.colyseus.sdk
   name: io.colyseus.sdk
   displayName: Colyseus SDK
@@ -3249,6 +3249,7 @@ m_ResolvedPackages:
     - 1.4.0
     - 1.4.1
     - 1.4.2
+    - 1.4.3
     - 2.0.1-exp.1
     - 2.0.1-exp.2
     - 2.0.1-pre.12
@@ -3267,6 +3268,7 @@ m_ResolvedPackages:
     - 1.4.0
     - 1.4.1
     - 1.4.2
+    - 1.4.3
     - 2.0.1-exp.1
     - 2.0.1-exp.2
     - 2.0.1-pre.12

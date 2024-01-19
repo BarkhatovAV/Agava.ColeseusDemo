@@ -1,7 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{7EBBE26E-DEF8-0838-D39A-B3C454E8E13C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColyseusDemo.GameUI", "ColyseusDemo.GameUI.csproj", "{16405E4C-DDBA-7B48-3AAF-0960574A70F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColyseusDemo.MenuUI", "ColyseusDemo.MenuUI.csproj", "{1ABFEDFE-34AD-9184-64CF-3F8E18E8944A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColyseusDemo.Players", "ColyseusDemo.Players.csproj", "{FF86CF9F-2937-4711-350F-4C187C993D7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColyseusDemo.Multiplayer", "ColyseusDemo.Multiplayer.csproj", "{71E6A1A7-1B59-F1E4-3C8B-76A142B6D6FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColyseusDemo.TurnEnding", "ColyseusDemo.TurnEnding.csproj", "{1BBF6BB0-B86A-1514-8D95-A74171B1038C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColyseusDemo.ChessMovement", "ColyseusDemo.ChessMovement.csproj", "{DE01FD9E-9C7E-8E29-0429-BEC3CAB157DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColyseusDemo.ChessSelection", "ColyseusDemo.ChessSelection.csproj", "{D0AC1E72-95B4-7EF5-D406-090C1C19F815}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +21,34 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7EBBE26E-DEF8-0838-D39A-B3C454E8E13C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7EBBE26E-DEF8-0838-D39A-B3C454E8E13C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7EBBE26E-DEF8-0838-D39A-B3C454E8E13C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7EBBE26E-DEF8-0838-D39A-B3C454E8E13C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16405E4C-DDBA-7B48-3AAF-0960574A70F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16405E4C-DDBA-7B48-3AAF-0960574A70F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16405E4C-DDBA-7B48-3AAF-0960574A70F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16405E4C-DDBA-7B48-3AAF-0960574A70F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1ABFEDFE-34AD-9184-64CF-3F8E18E8944A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1ABFEDFE-34AD-9184-64CF-3F8E18E8944A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1ABFEDFE-34AD-9184-64CF-3F8E18E8944A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1ABFEDFE-34AD-9184-64CF-3F8E18E8944A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF86CF9F-2937-4711-350F-4C187C993D7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF86CF9F-2937-4711-350F-4C187C993D7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF86CF9F-2937-4711-350F-4C187C993D7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF86CF9F-2937-4711-350F-4C187C993D7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71E6A1A7-1B59-F1E4-3C8B-76A142B6D6FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71E6A1A7-1B59-F1E4-3C8B-76A142B6D6FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71E6A1A7-1B59-F1E4-3C8B-76A142B6D6FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71E6A1A7-1B59-F1E4-3C8B-76A142B6D6FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BBF6BB0-B86A-1514-8D95-A74171B1038C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BBF6BB0-B86A-1514-8D95-A74171B1038C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BBF6BB0-B86A-1514-8D95-A74171B1038C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BBF6BB0-B86A-1514-8D95-A74171B1038C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE01FD9E-9C7E-8E29-0429-BEC3CAB157DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE01FD9E-9C7E-8E29-0429-BEC3CAB157DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE01FD9E-9C7E-8E29-0429-BEC3CAB157DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE01FD9E-9C7E-8E29-0429-BEC3CAB157DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0AC1E72-95B4-7EF5-D406-090C1C19F815}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0AC1E72-95B4-7EF5-D406-090C1C19F815}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0AC1E72-95B4-7EF5-D406-090C1C19F815}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0AC1E72-95B4-7EF5-D406-090C1C19F815}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
