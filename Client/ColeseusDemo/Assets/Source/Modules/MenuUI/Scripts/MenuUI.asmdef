@@ -2,8 +2,8 @@
     "name": "ColyseusDemo.MenuUI",
     "rootNamespace": "ColyseusDemo.MenuUI",
     "references": [
-        "GUID:d0b0e402775693d4bab8ff5b8271db60",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:d0b0e402775693d4bab8ff5b8271db60"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

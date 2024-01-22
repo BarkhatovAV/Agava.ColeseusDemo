@@ -1,10 +1,10 @@
 using ColyseusDemo.ChessMovement;
 using UnityEngine;
 
-namespace ColyseusDemo.ChessSelection
+namespace ColyseusDemo.ChessSquareSelection
 {
     [RequireComponent(typeof(Camera))]
-    internal class ChessSelector : MonoBehaviour
+    internal class ChessSquareSelector : MonoBehaviour
     {
         private Camera _camera;
         private Ray _ray;
@@ -15,9 +15,9 @@ namespace ColyseusDemo.ChessSelection
             _camera = GetComponent<Camera>();
 
         private void Update() =>
-            HighlightChess();
+            HighlightChessSquare();
 
-        private bool HighlightChess()
+        private bool HighlightChessSquare()
         {
             _ray = _camera.ScreenPointToRay(Input.mousePosition);
 
@@ -27,11 +27,13 @@ namespace ColyseusDemo.ChessSelection
                 {
                     chessSquare.Highlight();
 
-                    if (_selectedChessSquare != chessSquare)
+                    if (_selectedChessSquare != null && _selectedChessSquare != chessSquare)
                     {
                         _selectedChessSquare.Unhighlight();
                         _selectedChessSquare = chessSquare;
                     }
+
+                    _selectedChessSquare = chessSquare;
                 }
                 else if (_selectedChessSquare)
                 {

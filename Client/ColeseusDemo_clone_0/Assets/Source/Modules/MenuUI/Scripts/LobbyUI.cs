@@ -13,24 +13,32 @@ namespace ColyseusDemo.MenuUI
         [SerializeField] private TMP_InputField _loginInputField;
         [SerializeField] private Button _connectButton;
 
+        private PlayerSettings _playerSettings;
+
         private void OnEnable()
         {
             _loginInputField.onEndEdit.AddListener(InputLogin);
-            _connectButton.onClick.AddListener(Connect);
+            _connectButton.onClick.AddListener(LoadGame);
         }
 
         private void OnDisable()
         {
             _loginInputField.onEndEdit.RemoveListener(InputLogin);
-            _connectButton.onClick.RemoveListener(Connect);
+            _connectButton.onClick.RemoveListener(LoadGame);
         }
 
         private void InputLogin(string login) =>
-            PlayerSettings.CurrentPlayerSettings.SetLogin(login);
+            _playerSettings.SetLogin(login);
 
-        private void Connect()
+        public void Construct(PlayerSettings playerSettings)
         {
-            bool isInvalidLogin = string.IsNullOrEmpty(PlayerSettings.CurrentPlayerSettings.Login);
+            _playerSettings = playerSettings;
+        }
+
+        private void LoadGame()
+        {
+            string playerLogin = _playerSettings.Login;
+            bool isInvalidLogin = string.IsNullOrEmpty(playerLogin);
 
             if (isInvalidLogin)
                 Debug.LogError(InvalidLoginErrorText);

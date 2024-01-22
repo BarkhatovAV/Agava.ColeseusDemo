@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Colyseus;
-using ColyseusDemo.Players;
-using UnityEngine;
 
 namespace ColyseusDemo.Multiplayer
 {
@@ -16,29 +14,11 @@ namespace ColyseusDemo.Multiplayer
 
         public string ClientID => _room == null ? "" : _room.SessionId;
 
-        private void Awake()
+        public void FindGame(string login)
         {
-            base.Awake();
-            FindGame();
-        }
-
-        //private void OnEnable()
-        //{
-        //    _room.OnJoin += SetLoggins;
-        //}
-
-        private void OnDisable()
-        {
-            _room.OnJoin -= SetLoggins;
-        }
-
-        public void FindGame()
-        {
-            //Это в gameRoot Awake
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
             InitializeClient();
-            ConnectClient();
-            //SubscribeMessages();
+            ConnectClient(login);
         }
 
         public bool TrySendMessage(string key, object message)
@@ -46,15 +26,9 @@ namespace ColyseusDemo.Multiplayer
             bool isCorrectMessage = MessagesNames.DetermineMessageCorrectness(key, message);
 
             if (isCorrectMessage)
-            {
                 _room.Send(key, message);
 
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return isCorrectMessage;
         }
 
         public void Leave()
@@ -63,28 +37,34 @@ namespace ColyseusDemo.Multiplayer
             _room = null;
         }
 
-        private async void ConnectClient()
+        private async void ConnectClient(string playerLogin)
         {
             Dictionary<string, object> data = new Dictionary<string, object>()
             {
-                {MessagesNames.Login, PlayerSettings.CurrentPlayerSettings.Login }
+                {MessagesNames.Login, playerLogin }
             };
 
             _room = await client.JoinOrCreate<State>(StatesNames.GameRoomName, data);
+            //По-хорошему нужно это переместить куда-то ещё
             SubscribeMessages();
         }
 
         private void SubscribeMessages()
         {
-            Debug.Log(_room == null);
             _room.OnMessage<string>(MessagesNames.Spawn, jsonSpawnData => UnitSpawned?.Invoke(jsonSpawnData));
             _room.OnMessage<string>(MessagesNames.TurnEnded, jsonTurnEndedData => TurnEnded?.Invoke(jsonTurnEndedData));
-            _room.OnJoin += SetLoggins;
+
+            //_room.OnJoin += SetLoggins;
+            _room.OnStateChange += OnStateChanged;
         }
 
-        private void SetLoggins()
+        private void OnStateChanged(State state, bool isFirstState)
         {
-            Debug.Log("dfgsdfg");
+            TransferLogins();
+        }
+
+        private void TransferLogins()
+        {
             string playerLogin = "";
             string enemyLogin = "";
 

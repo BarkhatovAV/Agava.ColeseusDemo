@@ -15,8 +15,8 @@ namespace ColyseusDemo.TurnEnding
         private void GetTurn(string jsonTurnEndedData)
         {
             int turnIndicator = JsonUtility.FromJson<int>(jsonTurnEndedData);
-            bool isPlayerRoomOwner = PlayerSettings.CurrentPlayerSettings.IsWhitePlayer;
-            bool isPlayerSpawnReady = turnIndicator == 0 && isPlayerRoomOwner;
+            //bool isPlayerRoomOwner = PlayerSettings.CurrentPlayerSettings;
+            //bool isPlayerSpawnReady = turnIndicator == 0 && isPlayerRoomOwner;
 
             //_spawner.SetSpawnReadyStatus(isPlayerSpawnReady);
         }

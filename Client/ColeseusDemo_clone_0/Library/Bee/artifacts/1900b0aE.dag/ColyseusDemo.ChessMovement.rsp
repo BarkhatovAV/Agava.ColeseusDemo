@@ -345,6 +345,7 @@
 "Assets/Source/Modules/ChessMovement/ChessPiece.cs"
 "Assets/Source/Modules/ChessMovement/ChessSpawner.cs"
 "Assets/Source/Modules/ChessMovement/ChessSquare.cs"
+"Assets/Source/Modules/ChessMovement/SpawnData.cs"
 -langversion:9.0
 
 /deterministic

@@ -6,31 +6,31 @@ using UnityEngine.UI;
 
 namespace ColyseusDemo.GameUI
 {
+    //Логику подвязать к игроку, а не к Multiplayer'у
     public class GameInterface : MonoBehaviour
     {
         [SerializeField] private MultiplayerManager _multiplayerManager;
         [SerializeField] private ChessSpawner _spawner;
         [SerializeField] private TMP_Text _playerLoginPlace;
         [SerializeField] private TMP_Text _enemyLoginPlace;
-        [SerializeField] private Button _endTurnButton;
+        [SerializeField] private Button _skipButton;
         [SerializeField] private Button _setBallButton;
 
         private void OnEnable()
         {
-            _multiplayerManager.PlayerConnected += SetPlayersLoggins;
-            _endTurnButton.onClick.AddListener(_spawner.SetBall);
+            _multiplayerManager.PlayerConnected += SetPlayersLogins;
+            _setBallButton.onClick.AddListener(_spawner.SetBall);
             //Тут должна быть подписка метода, который отсылает сообщение о том, что игрок закончил ход к кнопке _endTurn
         }
 
         private void OnDisable() 
         {
-            _multiplayerManager.PlayerConnected -= SetPlayersLoggins;
-            _endTurnButton.onClick.RemoveListener(_spawner.SetBall);
+            _multiplayerManager.PlayerConnected -= SetPlayersLogins;
+            _setBallButton.onClick.RemoveListener(_spawner.SetBall);
         }
 
-        private void SetPlayersLoggins(string playerLogin, string enemyLogin)
+        private void SetPlayersLogins(string playerLogin, string enemyLogin)
         {
-            Debug.Log("gdfag");
             _playerLoginPlace.text = playerLogin;
             _enemyLoginPlace.text = enemyLogin;
         }

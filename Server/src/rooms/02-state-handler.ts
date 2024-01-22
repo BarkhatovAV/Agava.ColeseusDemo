@@ -2,8 +2,13 @@ import { Room, Client } from "colyseus";
 import { Schema, type, MapSchema } from "@colyseus/schema";
 
 export class Player extends Schema {
-    @type("string") login = ""
-    @type("uint32") isPlayerTurnReady;
+    @type("string") login = "";
+    @type ("boolean") isTurnReady = false;
+}
+
+export class HeyWhere extends Schema {
+    @type("string") login = "";
+    @type ("boolean") isTurnReady = false;
 }
 
 export class State extends Schema {
@@ -31,6 +36,7 @@ export class StateHandlerRoom extends Room<State> {
 
         this.setState(new State());
 
+        //что-то подобное
         this.onMessage("spawn", (client, data) => {
             this.broadcast("spawn", JSON.stringify({
                 sessionID: client.sessionId, 

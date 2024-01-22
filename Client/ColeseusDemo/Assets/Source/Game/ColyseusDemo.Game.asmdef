@@ -1,9 +1,11 @@
 {
     "name": "ColyseusDemo.Game",
-    "rootNamespace": "",
+    "rootNamespace": "ColyseusDemo.Game",
     "references": [
         "GUID:1a8902c9be8fecf46bc9a6209dcf4c0f",
-        "GUID:7d8788162c0190c4c8b801543ada1607"
+        "GUID:7d8788162c0190c4c8b801543ada1607",
+        "GUID:d0b0e402775693d4bab8ff5b8271db60",
+        "GUID:9cd2aa896c8a14b48976605016610996"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

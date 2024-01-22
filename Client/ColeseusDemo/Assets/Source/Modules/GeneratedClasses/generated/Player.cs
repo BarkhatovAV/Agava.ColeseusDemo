@@ -12,6 +12,9 @@ public partial class Player : Schema {
 	[Type(0, "string")]
 	public string login = default(string);
 
+	[Type(1, "boolean")]
+	public bool isTurnReady = default(bool);
+
 	/*
 	 * Support for individual property change callbacks below...
 	 */
@@ -28,9 +31,22 @@ public partial class Player : Schema {
 		};
 	}
 
+	protected event PropertyChangeHandler<bool> __isTurnReadyChange;
+	public Action OnIsTurnReadyChange(PropertyChangeHandler<bool> __handler, bool __immediate = true) {
+		if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+		__callbacks.AddPropertyCallback(nameof(this.isTurnReady));
+		__isTurnReadyChange += __handler;
+		if (__immediate && this.isTurnReady != default(bool)) { __handler(this.isTurnReady, default(bool)); }
+		return () => {
+			__callbacks.RemovePropertyCallback(nameof(isTurnReady));
+			__isTurnReadyChange -= __handler;
+		};
+	}
+
 	protected override void TriggerFieldChange(DataChange change) {
 		switch (change.Field) {
 			case nameof(login): __loginChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
+			case nameof(isTurnReady): __isTurnReadyChange?.Invoke((bool) change.Value, (bool) change.PreviousValue); break;
 			default: break;
 		}
 	}

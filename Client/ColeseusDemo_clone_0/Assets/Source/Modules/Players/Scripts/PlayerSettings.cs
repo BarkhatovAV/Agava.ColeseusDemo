@@ -1,38 +1,22 @@
-using UnityEngine;
-
 namespace ColyseusDemo.Players
 {
-    public class PlayerSettings : MonoBehaviour
+    public class PlayerSettings
     {
-        public static PlayerSettings CurrentPlayerSettings { get; private set; }
-
         public string Login { get; private set; }
-        public bool IsWhitePlayer { get; private set; }
+        public bool IsTurnReady { get; private set; }
 
-        private void Awake()
-        {
-            if (CurrentPlayerSettings)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                CurrentPlayerSettings = this;
-                DontDestroyOnLoad(gameObject);
-            }
-        }
-
-        private void OnDestroy()
-        {
-            if (CurrentPlayerSettings == this)
-                CurrentPlayerSettings = null;
-        }
+        private Player _enemy;
 
         public void SetLogin(string login) =>
             Login = login;
-        
-        //Вот тут
-        internal void SetWhitePlayerStatus(bool value) =>
-            IsWhitePlayer = value;
+
+        public void SetEnemy(Player enemy)
+        {
+            _enemy = enemy;
+            _enemy.OnIsTurnReadyChange(GetTurn);
+        }
+
+        private void GetTurn(bool currentValue, bool previousValue) =>
+            IsTurnReady = currentValue;
     }
 }

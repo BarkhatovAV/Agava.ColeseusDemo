@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _chessPieceSpawnPlace: {fileID: 5312999115774720733}
+  _emissionIndex: 3
   _brightedMaterial: {fileID: 2100000, guid: 07157088b25eecb48a48f18f31a71829, type: 2}
 --- !u!1 &6164848888519817642
 GameObject:

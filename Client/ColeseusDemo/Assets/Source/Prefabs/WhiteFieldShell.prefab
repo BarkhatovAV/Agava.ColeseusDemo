@@ -151,4 +151,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _chessPieceSpawnPlace: {fileID: 4958333530492282976}
+  _emissionIndex: 300
   _brightedMaterial: {fileID: 2100000, guid: 07157088b25eecb48a48f18f31a71829, type: 2}

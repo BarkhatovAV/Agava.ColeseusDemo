@@ -1,29 +1,21 @@
-using System;
-using System.Collections.Generic;
 using ColyseusDemo.Multiplayer;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ColyseusDemo.ChessMovement
 {
-    //К MultiplayerManager можем обращаться отсюда или в принципе с любого другого класса
-    public class ChessSpawner : MonoBehaviour
+    public partial class ChessSpawner : MonoBehaviour
     {
-        [SerializeField] private Button _button;
-        [SerializeField] private GameObject _gameObject;
+        [SerializeField] private ChessPiece _chessPrefab;
 
         private float _positionX = -8.75f;
         private bool _isSpawnReady;
 
-        private void OnEnable()
-        {
+        private void OnEnable() =>
             MultiplayerManager.Instance.UnitSpawned += SpawnBall;
-        }
 
-        private void OnDestroy()
-        {
+        private void OnDisable() =>
             MultiplayerManager.Instance.UnitSpawned -= SpawnBall;
-        }
 
         public void SetBall()
         {
@@ -32,14 +24,14 @@ namespace ColyseusDemo.ChessMovement
                 Vector3 ballSpawnPosition = new Vector3(_positionX, 0, 6);
 
                 SetNewBall(ballSpawnPosition);
-                SendSpawn(_gameObject.name, ballSpawnPosition);
+                SendSpawn(_chessPrefab.name, ballSpawnPosition);
             }
         }
 
         private void SetNewBall(Vector3 ballSpawnPosition)
         {
             _positionX += 2.5f;
-            Instantiate(_gameObject, ballSpawnPosition, Quaternion.identity);
+            Instantiate(_chessPrefab, ballSpawnPosition, Quaternion.identity);
         }
 
         private void SendSpawn(string id, Vector3 spawnPoint)
@@ -64,24 +56,13 @@ namespace ColyseusDemo.ChessMovement
             if (isEnemy)
                 spawnPoint *= -1;
 
-            Spawn(spawnPoint);
+            SpawnChess(spawnPoint);
         }
 
-        private void Spawn(in Vector3 spawnPoint)
-        {
-            Instantiate(_gameObject, spawnPoint, Quaternion.identity);
-        }
+        private void SpawnChess(in Vector3 spawnPoint) =>
+            Instantiate(_chessPrefab, spawnPoint, Quaternion.identity);
 
         internal void SetSpawnReadyStatus(bool value) =>
             _isSpawnReady = value;
-
-        [Serializable]
-        public class SpawnData
-        {
-            public string sessionID;
-            public string id;
-            public float x;
-            public float z;
-        }
     }
 }
