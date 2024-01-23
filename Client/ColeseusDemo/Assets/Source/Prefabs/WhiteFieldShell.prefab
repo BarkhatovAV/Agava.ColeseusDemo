@@ -150,6 +150,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01827e917940eaa4fac7828bf9132e86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _chessPieceSpawnPlace: {fileID: 4958333530492282976}
-  _emissionIndex: 300
+  <IsWhiteBusy>k__BackingField: 0
+  _diskPlace: {fileID: 4958333530492282976}
   _brightedMaterial: {fileID: 2100000, guid: 07157088b25eecb48a48f18f31a71829, type: 2}
+  _accessibilityMaterial: {fileID: 2100000, guid: e1ee31b3589c7de43bc02a2db00638b0, type: 2}
+  _isBusy: 0
+  _isWhiteBusy: 0

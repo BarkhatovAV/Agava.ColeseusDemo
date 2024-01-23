@@ -1,27 +1,28 @@
-using ColyseusDemo.MenuUI;
 using ColyseusDemo.Multiplayer;
 using ColyseusDemo.Players;
+using ColyseusDemo.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace ColyseusDemo.Game
 {
-    public class GameRoot : MonoBehaviour
+    internal class GameRoot : MonoBehaviour
     {
         private const string GameSceneName = "Game";
 
         [SerializeField] private MultiplayerManager _multiplayerManager;
         [SerializeField] private LobbyUI _lobbyUI;
 
+        private GameUI _gameInterface;
         private PlayerSettings _playerSettings;
 
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
 
-            _playerSettings = new PlayerSettings();
+            _playerSettings = new PlayerSettings(_multiplayerManager);
 
-            ConstructObjects();
+            _lobbyUI.Construct(_playerSettings);
         }
 
         private void OnEnable() =>
@@ -32,13 +33,20 @@ namespace ColyseusDemo.Game
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (scene.name == GameSceneName)
-                _multiplayerManager.FindGame(_playerSettings.Login);
+            switch (scene.name)
+            {
+                case GameSceneName:
+                    PrepareGameScene();
+                    break;
+            }
         }
 
-        private void ConstructObjects()
+        private void PrepareGameScene()
         {
-            _lobbyUI.Construct(_playerSettings);
+            _multiplayerManager.FindGame(_playerSettings.Login);
+
+            _gameInterface = FindObjectOfType<GameUI>();
+            _gameInterface.Construct(_playerSettings);
         }
     }
 }

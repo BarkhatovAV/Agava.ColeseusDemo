@@ -1028,33 +1028,25 @@
       <Project>{FF86CF9F-2937-4711-350F-4C187C993D7F}</Project>
       <Name>ColyseusDemo.Players</Name>
     </ProjectReference>
+    <ProjectReference Include="ColyseusDemo.Checkers.csproj">
+      <Project>{F2C52780-F9F1-5F7E-1CAB-4B499F484989}</Project>
+      <Name>ColyseusDemo.Checkers</Name>
+    </ProjectReference>
     <ProjectReference Include="ColyseusDemo.Game.csproj">
       <Project>{C43507C4-D9DE-5D2C-CD7F-1AEB84B09345}</Project>
       <Name>ColyseusDemo.Game</Name>
-    </ProjectReference>
-    <ProjectReference Include="ColyseusDemo.MenuUI.csproj">
-      <Project>{1ABFEDFE-34AD-9184-64CF-3F8E18E8944A}</Project>
-      <Name>ColyseusDemo.MenuUI</Name>
-    </ProjectReference>
-    <ProjectReference Include="ColyseusDemo.GameUI.csproj">
-      <Project>{16405E4C-DDBA-7B48-3AAF-0960574A70F8}</Project>
-      <Name>ColyseusDemo.GameUI</Name>
     </ProjectReference>
     <ProjectReference Include="GeneratedClasses.csproj">
       <Project>{30F7AC61-FA09-E6A0-54E6-B1C8AAE990AD}</Project>
       <Name>GeneratedClasses</Name>
     </ProjectReference>
-    <ProjectReference Include="ColyseusDemo.ChessSelection.csproj">
-      <Project>{D0AC1E72-95B4-7EF5-D406-090C1C19F815}</Project>
-      <Name>ColyseusDemo.ChessSelection</Name>
+    <ProjectReference Include="ColyseusDemo.SendTypes.csproj">
+      <Project>{BC9671F7-055C-7527-EA45-0F088006CC8C}</Project>
+      <Name>ColyseusDemo.SendTypes</Name>
     </ProjectReference>
-    <ProjectReference Include="ColyseusDemo.ChessMovement.csproj">
-      <Project>{DE01FD9E-9C7E-8E29-0429-BEC3CAB157DD}</Project>
-      <Name>ColyseusDemo.ChessMovement</Name>
-    </ProjectReference>
-    <ProjectReference Include="ColyseusDemo.TurnEnding.csproj">
-      <Project>{1BBF6BB0-B86A-1514-8D95-A74171B1038C}</Project>
-      <Name>ColyseusDemo.TurnEnding</Name>
+    <ProjectReference Include="ColyseusDemo.UI.csproj">
+      <Project>{60609CCE-5845-8854-BA68-C975ABAFB1F7}</Project>
+      <Name>ColyseusDemo.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

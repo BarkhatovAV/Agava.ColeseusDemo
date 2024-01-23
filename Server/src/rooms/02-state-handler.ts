@@ -3,11 +3,7 @@ import { Schema, type, MapSchema } from "@colyseus/schema";
 
 export class Player extends Schema {
     @type("string") login = "";
-    @type ("boolean") isTurnReady = false;
-}
-
-export class HeyWhere extends Schema {
-    @type("string") login = "";
+    //1
     @type ("boolean") isTurnReady = false;
 }
 
@@ -26,6 +22,11 @@ export class State extends Schema {
     removePlayer(sessionId: string) {
         this.players.delete(sessionId);
     }
+    //2
+    changeTurnReady(sessionId: string, value: boolean){
+        const player = this.players.get(sessionId);
+        player.isTurnReady = value;
+    }
 }
 
 export class StateHandlerRoom extends Room<State> {
@@ -36,13 +37,24 @@ export class StateHandlerRoom extends Room<State> {
 
         this.setState(new State());
 
-        //что-то подобное
+        //broadcast и except: client нужны только когда сообщение отправляется и сразу обрабатывается у клиента
         this.onMessage("spawn", (client, data) => {
             this.broadcast("spawn", JSON.stringify({
                 sessionID: client.sessionId, 
                 id: data.id, 
                 x: data.x, 
                 z: data.z}), {except: client});
+        });
+
+        this.onMessage("moved", (client, data) => {
+            this.broadcast("moved", JSON.stringify({
+                sessionID: client.sessionId,
+                diskIndex: data.diskIndex,
+                diskPath: data.diskPath}), {except: client});
+        });
+        //3
+        this.onMessage("isTurnReady", (client, value) => {
+            this.state.changeTurnReady(client.sessionId, value)
         });
     }
 
@@ -64,5 +76,4 @@ export class StateHandlerRoom extends Room<State> {
     onDispose () {
         console.log("Dispose StateHandlerRoom");
     }
-
 }

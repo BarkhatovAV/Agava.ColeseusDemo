@@ -3,7 +3,8 @@
     "rootNamespace": "ColyseusDemo.Players",
     "references": [
         "GUID:6e4bf136925675144891a8ea8b56a1d5",
-        "GUID:7d8788162c0190c4c8b801543ada1607"
+        "GUID:7d8788162c0190c4c8b801543ada1607",
+        "GUID:1a8902c9be8fecf46bc9a6209dcf4c0f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

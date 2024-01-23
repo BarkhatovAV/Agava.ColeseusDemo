@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Colyseus;
+using Colyseus.Schema;
 
 namespace ColyseusDemo.Multiplayer
 {
@@ -8,15 +9,16 @@ namespace ColyseusDemo.Multiplayer
     {
         private ColyseusRoom<State> _room;
 
+        public event Action<bool> SideDefined;
         public event Action<string> UnitSpawned;
-        public event Action<string> TurnEnded;
-        public event Action<string, string> PlayerConnected;
+        public event Action<Player> EnemyFound;
+        public event Action<string> DiskMoved;
 
         public string ClientID => _room == null ? "" : _room.SessionId;
+        public string SessionId => _room.SessionId;
 
         public void FindGame(string login)
         {
-            //DontDestroyOnLoad(gameObject);
             InitializeClient();
             ConnectClient(login);
         }
@@ -45,42 +47,35 @@ namespace ColyseusDemo.Multiplayer
             };
 
             _room = await client.JoinOrCreate<State>(StatesNames.GameRoomName, data);
-            //По-хорошему нужно это переместить куда-то ещё
+
             SubscribeMessages();
         }
 
         private void SubscribeMessages()
         {
-            _room.OnMessage<string>(MessagesNames.Spawn, jsonSpawnData => UnitSpawned?.Invoke(jsonSpawnData));
-            _room.OnMessage<string>(MessagesNames.TurnEnded, jsonTurnEndedData => TurnEnded?.Invoke(jsonTurnEndedData));
+            _room.OnMessage<string>(MessagesNames.Move, jsonMovedData => DiskMoved?.Invoke(jsonMovedData));
 
-            //_room.OnJoin += SetLoggins;
+            //_room.OnJoin += OnRoomJoined;
             _room.OnStateChange += OnStateChanged;
         }
 
         private void OnStateChanged(State state, bool isFirstState)
         {
-            TransferLogins();
+            FindEnemy();
+            SideDefined?.Invoke(ClientID == SessionId);
         }
 
-        private void TransferLogins()
+        private void FindEnemy()
         {
-            string playerLogin = "";
-            string enemyLogin = "";
+            MapSchema<Player> players = _room.State.players;
 
-            State currentState = _room.State;
-
-            currentState.players.ForEach((key, player) =>
+            players.ForEach((key, player) =>
             {
                 print(player.login);
 
-                if (key == _room.SessionId)
-                    playerLogin = player.login;
-                else
-                    enemyLogin = player.login;
+                if (key != _room.SessionId)
+                    EnemyFound?.Invoke(player);
             });
-
-            PlayerConnected?.Invoke(playerLogin, enemyLogin);
         }
     }
 }

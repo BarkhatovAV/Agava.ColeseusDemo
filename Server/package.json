@@ -7,7 +7,7 @@
     "start": "tsx watch src/index.ts",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "export":   "npx schema-codegen src/rooms/02-state-handler.ts --csharp --output ../Client/ColeseusDemo/Assets/Source/Modules/Multiplayer/generated"
+    "export":   "npx schema-codegen src/rooms/02-state-handler.ts --csharp --output ../Client/ColeseusDemo/Assets/Source/Modules/GeneratedClasses/generated"
   },
   "engines": {
     "node": ">=16.x"
