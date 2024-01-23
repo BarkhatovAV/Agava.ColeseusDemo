@@ -1,5 +1,5 @@
+using ColyseusDemo.Checkers;
 using ColyseusDemo.Multiplayer;
-using ColyseusDemo.Players;
 using ColyseusDemo.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,6 +15,7 @@ namespace ColyseusDemo.Game
 
         private GameUI _gameInterface;
         private PlayerSettings _playerSettings;
+        private Selector _selector;
 
         private void Awake()
         {
@@ -46,7 +47,9 @@ namespace ColyseusDemo.Game
             _multiplayerManager.FindGame(_playerSettings.Login);
 
             _gameInterface = FindObjectOfType<GameUI>();
+            _selector = FindObjectOfType<Selector>();
             _gameInterface.Construct(_playerSettings);
+            _selector.SetPlayerSetting(_playerSettings);
         }
     }
 }

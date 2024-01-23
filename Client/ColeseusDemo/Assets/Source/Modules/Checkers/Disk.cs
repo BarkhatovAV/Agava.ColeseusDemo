@@ -26,8 +26,6 @@ namespace ColyseusDemo.Checkers
 
         internal void MoveTo(MapSquare nextMapSquare)
         {
-            SendMoveMessage(nextMapSquare);
-
             CurrentMapSquare.SetBusyStatus(false);
 
             CurrentMapSquare = nextMapSquare;
@@ -35,6 +33,8 @@ namespace ColyseusDemo.Checkers
             CurrentMapSquare.SetIsWhiteBusy(IsWhite);
 
             transform.position = new Vector3(CurrentMapSquare.DiskPlace.x, transform.position.y, CurrentMapSquare.DiskPlace.z);
+
+            //SendMoveMessage(nextMapSquare);
         }
 
         internal void Drag() =>
@@ -43,7 +43,7 @@ namespace ColyseusDemo.Checkers
         internal void Undrag() =>
             _meshRenderer.material = _defaultMaterial;
 
-        private void SendMoveMessage(MapSquare targetMapSquare)
+        internal void SendMoveMessage(MapSquare targetMapSquare)
         {
             AddWayPoints(targetMapSquare);
             MultiplayerManager.Instance.TrySendMessage(MessagesNames.Move, _currentWayInfo);

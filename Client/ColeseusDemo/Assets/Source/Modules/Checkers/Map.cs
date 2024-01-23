@@ -53,8 +53,8 @@ namespace ColyseusDemo.Checkers
             }
             else
             {
-                leftTempMapSquare = TryFoundWay(currentMapSquare, -1, -1, isWhiteDisk);
-                rightTempMapSquare = TryFoundWay(currentMapSquare, 1, -1, isWhiteDisk);
+                leftTempMapSquare = TryFoundWay(currentMapSquare, 1, -1, isWhiteDisk);
+                rightTempMapSquare = TryFoundWay(currentMapSquare, -1, 1, isWhiteDisk);
 
                 if (leftTempMapSquare != null)
                     _availableMapSquares.Add(leftTempMapSquare);
@@ -89,14 +89,7 @@ namespace ColyseusDemo.Checkers
                     if (tempMapSquare.IsWhiteBusy && isWhite)
                         return null;
                     else
-                    {
-                        MapSquare tempMapSquare2 = _mapPlan[widthPosition * 2, lengthPosition * 2];
-
-                        if (tempMapSquare2.IsBusy)
-                            return null;
-                        else
-                            return tempMapSquare2;
-                    }
+                        return null; // тут логика
                 }
                 else
                     return tempMapSquare;

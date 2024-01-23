@@ -1,4 +1,4 @@
-using ColyseusDemo.Players;
+using ColyseusDemo.Checkers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;

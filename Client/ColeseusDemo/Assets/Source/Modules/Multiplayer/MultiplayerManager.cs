@@ -12,6 +12,7 @@ namespace ColyseusDemo.Multiplayer
         public event Action<bool> SideDefined;
         public event Action<string> UnitSpawned;
         public event Action<Player> EnemyFound;
+        public event Action<Player> PlayerFound;
         public event Action<string> DiskMoved;
 
         public string ClientID => _room == null ? "" : _room.SessionId;
@@ -75,6 +76,8 @@ namespace ColyseusDemo.Multiplayer
 
                 if (key != _room.SessionId)
                     EnemyFound?.Invoke(player);
+                else
+                    PlayerFound?.Invoke(player);
             });
         }
     }

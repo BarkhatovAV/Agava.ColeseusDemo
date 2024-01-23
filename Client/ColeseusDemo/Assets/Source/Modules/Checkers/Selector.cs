@@ -3,10 +3,11 @@ using UnityEngine;
 namespace ColyseusDemo.Checkers
 {
     [RequireComponent(typeof(Camera))]
-    internal class Selector : MonoBehaviour
+    public class Selector : MonoBehaviour
     {
         [SerializeField] private Map _map;
 
+        private PlayerSettings _playerSettings;
         private Camera _camera;
         private Ray _ray;
         private RaycastHit _raycastHit;
@@ -19,30 +20,37 @@ namespace ColyseusDemo.Checkers
 
         private void Update()
         {
-            _ray = _camera.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(_ray, out _raycastHit))
+            if (_playerSettings.IsTurnReady)
             {
+                _ray = _camera.ScreenPointToRay(Input.mousePosition);
+
                 if (_isDraggingMode)
                 {
                     HighlightChessSquare();
 
                     if (Input.GetMouseButtonDown(0))
                     {
-                        if(_raycastHit.collider.gameObject.TryGetComponent<MapSquare>(out MapSquare selectedMapSquare))
+                        if (_selectedDisk != null && _selectedMapSquare != null)
                         {
-                            if(selectedMapSquare == _selectedMapSquare)
-                            {
-                                _map.OnDiskMoved();
-                                _selectedMapSquare.SetAvailable(false);
-                                _selectedDisk.MoveTo(_selectedMapSquare);
-                            }
+                            _selectedDisk.MoveTo(_selectedMapSquare);
+                            _selectedDisk.SendMoveMessage(_selectedMapSquare);
+                            _playerSettings.PassTurn();
                         }
-                        else
-                        {
-                            DropDisk();
-                            TryDragDisk();
-                        }
+
+                        //if(_raycastHit.collider.gameObject.TryGetComponent<MapSquare>(out MapSquare selectedMapSquare))
+                        //{
+                        //    if(selectedMapSquare == _selectedMapSquare)
+                        //    {
+                        //        _map.OnDiskMoved();
+                        //        _selectedMapSquare.SetAvailable(false);
+                        //        _selectedDisk.MoveTo(_selectedMapSquare);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    DropDisk();
+                        //    TryDragDisk();
+                        //}
                     }
                 }
 
@@ -51,47 +59,60 @@ namespace ColyseusDemo.Checkers
             }
         }
 
+        public void SetPlayerSetting(PlayerSettings playerSettings)
+        {
+            _playerSettings = playerSettings;
+        }
+
         private bool TryDragDisk()
         {
-            if (_raycastHit.collider.gameObject.TryGetComponent<Disk>(out Disk selectedDisk))
+            if (Physics.Raycast(_ray, out _raycastHit))
             {
-                if(_selectedDisk != null)
-                    _selectedDisk.Undrag();
+                if (_raycastHit.collider.gameObject.TryGetComponent<Disk>(out Disk selectedDisk))
+                {
+                    if (_selectedDisk != null)
+                        _selectedDisk.Undrag();
 
-                _selectedDisk = selectedDisk;
-                _selectedDisk.Drag();
-                _isDraggingMode = true;
+                    _selectedDisk = selectedDisk;
+                    _selectedDisk.Drag();
+                    _isDraggingMode = true;
 
-                _map.DetermineAvailableMapSquares(_selectedDisk.CurrentMapSquare, true);
+                    _map.DetermineAvailableMapSquares(_selectedDisk.CurrentMapSquare, true);
 
-                return true;
+                    return true;
+                }
+                else
+                {
+                    DropDisk();
+
+                    return false;
+                }
             }
-            else
-            {
-                DropDisk();
 
-                return false;
-            }
+            return false;
         }
 
         private void DropDisk()
         {
-            _selectedDisk.Undrag();
+            //_selectedDisk.Undrag();
             _selectedDisk = null;
             _isDraggingMode = false;
         }
 
         private void HighlightChessSquare()
         {
-            if (_raycastHit.collider.TryGetComponent<MapSquare>(out MapSquare mapSquare) && mapSquare.IsAvailable)
+            if (Physics.Raycast(_ray, out _raycastHit))
             {
-                _selectedMapSquare = mapSquare;
-                _selectedMapSquare.Highlight();
-            }
-            else if (_selectedMapSquare != null)
-            {
-                _selectedMapSquare.Unhighlight();
-                _selectedMapSquare = null;
+                if (_raycastHit.collider.TryGetComponent<MapSquare>(out MapSquare mapSquare) && mapSquare.IsAvailable)
+                {
+                    _selectedMapSquare = mapSquare;
+                    _selectedMapSquare.Highlight();
+                }
+                else if (_selectedMapSquare != null)
+                {
+                    _selectedMapSquare.Unhighlight();
+                    _selectedMapSquare = null;
+                }
             }
         }
     }

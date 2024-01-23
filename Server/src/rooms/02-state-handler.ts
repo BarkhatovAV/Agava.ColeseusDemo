@@ -47,10 +47,14 @@ export class StateHandlerRoom extends Room<State> {
         });
 
         this.onMessage("moved", (client, data) => {
+            console.log("data.id", data.id);
+            console.log("data.targetMapWidthPosition", data.targetMapWidthPosition);
+            console.log("data.targetMapLengthPosition", data.targetMapLengthPosition);
             this.broadcast("moved", JSON.stringify({
                 sessionID: client.sessionId,
-                diskIndex: data.diskIndex,
-                diskPath: data.diskPath}), {except: client});
+                id: data.id,
+                targetMapWidthPosition: data.targetMapWidthPosition,
+                targetMapLengthPosition: data.targetMapLengthPosition}), {except: client});
         });
         //3
         this.onMessage("isTurnReady", (client, value) => {
