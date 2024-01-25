@@ -8,27 +8,24 @@ namespace ColyseusDemo.UI
     {
         [SerializeField] private TMP_Text _playerLoginPlace;
         [SerializeField] private TMP_Text _enemyLoginPlace;
+        [SerializeField] private CheckersPlayer _checkersPlayer;
 
-        private PlayerSettings _playerSettings;
+        private void OnEnable()
+        {
+            _checkersPlayer.EnemyFound += SetEnemyLogin;
+            _checkersPlayer.LoginSet += SetPlayerLogin;
+        }
 
         private void OnDisable()
         {
-            _playerSettings.EnemyFound -= SetEnemyLogin;
-        }
-
-        public void Construct(PlayerSettings playerSettings)
-        {
-            _playerSettings = playerSettings;
-
-            SetPlayerLogin();
-
-            _playerSettings.EnemyFound += SetEnemyLogin;
+            _checkersPlayer.EnemyFound -= SetEnemyLogin;
+            _checkersPlayer.LoginSet -= SetPlayerLogin;
         }
 
         private void SetPlayerLogin() =>
-            _playerLoginPlace.text = _playerSettings.Login;
+            _playerLoginPlace.text = _checkersPlayer.Login;
 
-        private void SetEnemyLogin() =>
-            _enemyLoginPlace.text = _playerSettings.Enemy.login;
+        private void SetEnemyLogin(string login) =>
+            _enemyLoginPlace.text = login;
     }
 }

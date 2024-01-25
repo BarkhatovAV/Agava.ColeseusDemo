@@ -11,10 +11,12 @@ namespace ColyseusDemo.Checkers
         [SerializeField] private List<MapSquare> _mapSquares = new List<MapSquare>();
 
         private MapSquare[,] _mapPlan = new MapSquare[MapWidth, MapLength];
-        private List<MapSquare> _availableMapSquares = new List<MapSquare>();
 
         private void Awake() =>
             FillMapPlan();
+
+        internal MapSquare GetMapSquare(int mapWidthPosition, int mapLengthPosition) =>
+            _mapPlan[mapWidthPosition, mapLengthPosition];
 
         private void FillMapPlan()
         {
@@ -26,77 +28,10 @@ namespace ColyseusDemo.Checkers
                 {
                     _mapPlan[i, j] = _mapSquares[squareCounter];
                     _mapSquares[squareCounter].SetMapPosition(i, j);
+                    Debug.Log($"{_mapPlan[i, j].gameObject.name} w: {i}, l: {j}");
 
                     squareCounter++;
                 }
-            }
-        }
-
-        internal MapSquare GetTargetMapSquare(int mapWidthPosition, int mapLengthPosition) =>
-            _mapPlan[mapWidthPosition, mapLengthPosition];
-
-        internal void DetermineAvailableMapSquares(MapSquare currentMapSquare, bool isWhiteDisk)
-        {
-            MapSquare leftTempMapSquare;
-            MapSquare rightTempMapSquare;
-
-            if (isWhiteDisk)
-            {
-                leftTempMapSquare = TryFoundWay(currentMapSquare, 1, 1, isWhiteDisk);
-                rightTempMapSquare = TryFoundWay(currentMapSquare, -1, 1, isWhiteDisk);
-
-                if (leftTempMapSquare != null)
-                    _availableMapSquares.Add(leftTempMapSquare);
-
-                if(rightTempMapSquare != null)
-                    _availableMapSquares.Add(rightTempMapSquare);
-            }
-            else
-            {
-                leftTempMapSquare = TryFoundWay(currentMapSquare, 1, -1, isWhiteDisk);
-                rightTempMapSquare = TryFoundWay(currentMapSquare, -1, 1, isWhiteDisk);
-
-                if (leftTempMapSquare != null)
-                    _availableMapSquares.Add(leftTempMapSquare);
-
-                if (rightTempMapSquare != null)
-                    _availableMapSquares.Add(rightTempMapSquare);
-            }
-
-            foreach(MapSquare availableMapSquare in _availableMapSquares)
-                availableMapSquare.SetAvailable(true);
-        }
-
-        internal void OnDiskMoved()
-        {
-            foreach (MapSquare availableMapSquare in _availableMapSquares)
-                availableMapSquare.SetAvailable(false);
-
-            _availableMapSquares.Clear();
-        }
-
-        private MapSquare TryFoundWay(MapSquare currentMapSquare, int widthMoveModifier, int lenghtMoveModifier,  bool isWhite)
-        {
-            int widthPosition = currentMapSquare.MapWidthPosition + widthMoveModifier;
-            int lengthPosition = currentMapSquare.MapLengthPosition + lenghtMoveModifier;
-
-            MapSquare tempMapSquare = _mapPlan[widthPosition, lengthPosition];
-
-            if(tempMapSquare != null)
-            {
-                if (tempMapSquare.IsBusy)
-                {
-                    if (tempMapSquare.IsWhiteBusy && isWhite)
-                        return null;
-                    else
-                        return null; // тут логика
-                }
-                else
-                    return tempMapSquare;
-            }
-            else
-            {
-                return null;
             }
         }
     }

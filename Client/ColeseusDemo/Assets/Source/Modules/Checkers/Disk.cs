@@ -1,5 +1,3 @@
-using ColyseusDemo.Multiplayer;
-using ColyseusDemo.SendTypes;
 using UnityEngine;
 
 namespace ColyseusDemo.Checkers
@@ -8,51 +6,24 @@ namespace ColyseusDemo.Checkers
     public class Disk : MonoBehaviour
     {
         [field: SerializeField] public bool IsWhite { get; private set; }
-        [field: SerializeField] public MapSquare CurrentMapSquare;
+        [field: SerializeField] public MapSquare CurrentMapSquare { get; private set; }
 
-        [SerializeField] private int Id;
-        [SerializeField] private Material _draggingMaterial;
+        public int Id { get; private set; }
+        public Color DefaultColor { get; private set; }
 
-        private MeshRenderer _meshRenderer;
-        private Material _defaultMaterial;
-        private MoveInfo _currentWayInfo = new MoveInfo();
+        private void Awake() =>
+            SetDefaultMaterial();
 
-        private void Awake()
+        internal void SetCurrentMapSquare(MapSquare currentMapSquare) =>
+            CurrentMapSquare = currentMapSquare;
+
+        internal void SetId(int id) =>
+            Id = id;
+
+        private void SetDefaultMaterial()
         {
-            _meshRenderer = GetComponent<MeshRenderer>();
-            _defaultMaterial = _meshRenderer.material;
-            _currentWayInfo.id = Id;
-        }
-
-        internal void MoveTo(MapSquare nextMapSquare)
-        {
-            CurrentMapSquare.SetBusyStatus(false);
-
-            CurrentMapSquare = nextMapSquare;
-            CurrentMapSquare.SetBusyStatus(true);
-            CurrentMapSquare.SetIsWhiteBusy(IsWhite);
-
-            transform.position = new Vector3(CurrentMapSquare.DiskPlace.x, transform.position.y, CurrentMapSquare.DiskPlace.z);
-
-            //SendMoveMessage(nextMapSquare);
-        }
-
-        internal void Drag() =>
-            _meshRenderer.material = _draggingMaterial;
-
-        internal void Undrag() =>
-            _meshRenderer.material = _defaultMaterial;
-
-        internal void SendMoveMessage(MapSquare targetMapSquare)
-        {
-            AddWayPoints(targetMapSquare);
-            MultiplayerManager.Instance.TrySendMessage(MessagesNames.Move, _currentWayInfo);
-        }
-
-        private void AddWayPoints(MapSquare targetMapSquare)
-        {
-            _currentWayInfo.targetMapWidthPosition = targetMapSquare.MapWidthPosition;
-            _currentWayInfo.targetMapLengthPosition = targetMapSquare.MapLengthPosition;
+            if (gameObject.TryGetComponent<Renderer>(out Renderer renderer))
+                DefaultColor = renderer.material.color;
         }
     }
 }

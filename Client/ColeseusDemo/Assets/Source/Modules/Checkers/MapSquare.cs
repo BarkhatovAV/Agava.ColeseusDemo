@@ -3,59 +3,45 @@ using UnityEngine;
 namespace ColyseusDemo.Checkers
 {
     [RequireComponent(typeof(BoxCollider))]
-    [RequireComponent(typeof(MeshRenderer))]
+    [RequireComponent(typeof(Renderer))]
     public class MapSquare : MonoBehaviour
     {
-        [field: SerializeField] public bool IsWhiteBusy { get; private set; }
+        [field: SerializeField] public bool IsWhiteOccupied { get; private set; }
+        [field: SerializeField] public bool IsBlackOccupied { get; private set; }
+        [field: SerializeField] public bool IsOccupied { get; private set; }
 
-        public int MapWidthPosition { get; private set; }
-        public int MapLengthPosition { get; private set; }
-        public bool IsAvailable { get; private set; }
+        public int WidthPosition { get; private set; }
+        public int LengthPosition { get; private set; }
+        public Color DefaultColor { get; private set; }
 
         [SerializeField] private Transform _diskPlace;
-        [SerializeField] private Material _brightedMaterial;
-        [SerializeField] private Material _accessibilityMaterial;
-        [SerializeField] private bool _isBusy;
-        [SerializeField] private bool _isWhiteBusy;
 
-        private MeshRenderer _meshRenderer;
-        private Material _defaultMaterial;
-
-        public bool IsBusy => _isBusy;
         public Vector3 DiskPlace => _diskPlace.transform.position;
 
         private void Awake()
         {
-            _meshRenderer = GetComponent<MeshRenderer>();
-            _defaultMaterial = _meshRenderer.material;
+            Renderer renderer = GetComponent<Renderer>();
+            DefaultColor = renderer.material.color;
         }
 
-        public void SetMapPosition(int mapWidthPosition, int mapLengthPosition)
+        internal void SetMapPosition(int mapWidthPosition, int mapLengthPosition)
         {
-            MapWidthPosition = mapWidthPosition;
-            MapLengthPosition = mapLengthPosition;
+            WidthPosition = mapWidthPosition;
+            LengthPosition = mapLengthPosition;
         }
 
-        public void SetBusyStatus(bool isBusy) =>
-            _isBusy = isBusy;
-
-        public void SetIsWhiteBusy(bool isWhiteBusy) =>
-            _isWhiteBusy = isWhiteBusy;
-
-        public void SetAvailable(bool value)
+        internal void Occupy(bool isWhiteOccupied)
         {
-            IsAvailable = value;
-
-            if (IsAvailable)
-                _meshRenderer.material = _accessibilityMaterial;
-            else
-                _meshRenderer.material = _defaultMaterial;
+            IsOccupied = true;
+            IsWhiteOccupied = isWhiteOccupied;
+            IsBlackOccupied = !isWhiteOccupied;
         }
 
-        public void Highlight() =>
-            _meshRenderer.material = _brightedMaterial;
-
-        public void Unhighlight() =>
-            _meshRenderer.material = _accessibilityMaterial;
+        internal void Free()
+        {
+            IsOccupied = false;
+            IsWhiteOccupied = false;
+            IsBlackOccupied = false;
+        }
     }
 }

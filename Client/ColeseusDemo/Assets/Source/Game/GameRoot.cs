@@ -13,15 +13,15 @@ namespace ColyseusDemo.Game
         [SerializeField] private MultiplayerManager _multiplayerManager;
         [SerializeField] private LobbyUI _lobbyUI;
 
-        private GameUI _gameInterface;
+        private CheckersPlayerSetter _checkersPlayerSetter;
         private PlayerSettings _playerSettings;
-        private Selector _selector;
+        private CheckersPlayer _checkersPlayer;
 
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
 
-            _playerSettings = new PlayerSettings(_multiplayerManager);
+            _playerSettings = new PlayerSettings();
 
             _lobbyUI.Construct(_playerSettings);
         }
@@ -46,10 +46,10 @@ namespace ColyseusDemo.Game
         {
             _multiplayerManager.FindGame(_playerSettings.Login);
 
-            _gameInterface = FindObjectOfType<GameUI>();
-            _selector = FindObjectOfType<Selector>();
-            _gameInterface.Construct(_playerSettings);
-            _selector.SetPlayerSetting(_playerSettings);
+            _checkersPlayer = FindObjectOfType<CheckersPlayer>();
+            _checkersPlayerSetter = FindObjectOfType<CheckersPlayerSetter>();
+            _checkersPlayer.Construct(_multiplayerManager, _playerSettings);
+            _checkersPlayerSetter.Construct(_multiplayerManager);
         }
     }
 }
