@@ -20,8 +20,6 @@ namespace ColyseusDemo.Checkers
         private MapSquare _highlightedMapSquare;
         private MapSquare _selectedMapSquare;
         private Disk _selectedDisk;
-        private bool _isCorrectDisk = false;
-        private bool _isCorrectMapSquare = false;
 
         private void Awake() =>
             _camera = GetComponent<Camera>();
@@ -68,9 +66,9 @@ namespace ColyseusDemo.Checkers
 
         private bool TrySelectDisk(Disk selectedDisk)
         {
-            _isCorrectDisk = _disksMover.TryTakeDisk(selectedDisk);
+            bool isCorrectDisk = _disksMover.IsCorrectDisk(selectedDisk);
 
-            if (_isCorrectDisk)
+            if (isCorrectDisk)
             {
                 if (_selectedDisk != selectedDisk && _selectedDisk != null)
                     DropSelectedDisk();
@@ -105,10 +103,7 @@ namespace ColyseusDemo.Checkers
             UnhighlightAvailableSquares();
 
             if (_selectedDisk != null)
-            {
                 UnhighlightDisk(_selectedDisk);
-                _disksMover.DropDisk();
-            }
 
             _selectedDisk = null;
         }
@@ -127,9 +122,9 @@ namespace ColyseusDemo.Checkers
 
         private bool TrySelectMapSquare(MapSquare mapSquare)
         {
-            _isCorrectMapSquare = _availableSquares.Contains(mapSquare);
+            bool isCorrectMapSquare = _availableSquares.Contains(mapSquare);
 
-            if (_isCorrectMapSquare)
+            if (isCorrectMapSquare)
             {
                 _selectedMapSquare = mapSquare;
                 _highlightedMapSquare = null;
@@ -140,7 +135,7 @@ namespace ColyseusDemo.Checkers
                 DropSelectedDisk();
             }
 
-            return _isCorrectMapSquare;
+            return isCorrectMapSquare;
         }
 
         private bool TryHighlightMapSquare(MapSquare mapSquare)
