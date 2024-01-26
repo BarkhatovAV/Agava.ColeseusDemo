@@ -13,7 +13,6 @@ namespace ColyseusDemo.Game
         [SerializeField] private MultiplayerManager _multiplayerManager;
         [SerializeField] private LobbyUI _lobbyUI;
 
-        private CheckersPlayerSetter _checkersPlayerSetter;
         private PlayerSettings _playerSettings;
         private CheckersPlayer _checkersPlayer;
 
@@ -47,9 +46,7 @@ namespace ColyseusDemo.Game
             _multiplayerManager.FindGame(_playerSettings.Login);
 
             _checkersPlayer = FindObjectOfType<CheckersPlayer>();
-            _checkersPlayerSetter = FindObjectOfType<CheckersPlayerSetter>();
             _checkersPlayer.Construct(_multiplayerManager, _playerSettings);
-            _checkersPlayerSetter.Construct(_multiplayerManager);
         }
     }
 }

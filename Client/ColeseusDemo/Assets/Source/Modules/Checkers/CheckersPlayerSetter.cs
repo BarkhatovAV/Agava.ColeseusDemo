@@ -1,4 +1,3 @@
-using ColyseusDemo.Multiplayer;
 using UnityEngine;
 
 namespace ColyseusDemo.Checkers
@@ -8,16 +7,11 @@ namespace ColyseusDemo.Checkers
         [SerializeField] private CheckersPlayer _checkersPlayer;
         [SerializeField] private Transform _blackPlayerPlace;
 
-        private MultiplayerManager _multiplayerManager;
-
         private void OnEnable() =>
-            _multiplayerManager.SideDetermined += SetCamera;
+            _checkersPlayer.SideDetermined += SetCamera;
 
         private void OnDisable() =>
-            _multiplayerManager.SideDetermined -= SetCamera;
-
-        public void Construct(MultiplayerManager multiplayerManager) =>
-            _multiplayerManager = multiplayerManager;
+            _checkersPlayer.SideDetermined -= SetCamera;
 
         private void SetCamera(bool isWhiteSide)
         {

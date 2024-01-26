@@ -12,15 +12,9 @@ namespace ColyseusDemo.Multiplayer
         public event Action<Player> EnemyFound;
         public event Action<Player> PlayerFound;
         public event Action<string> DiskMoved;
-        public event Action<bool> SideDetermined;
 
         public string ClientID => _room == null ? "" : _room.SessionId;
         public string SessionId => _room.SessionId;
-
-        public void DeterminePlayerSide()
-        {
-            SideDetermined?.Invoke(true);
-        }
 
         public void FindGame(string login)
         {

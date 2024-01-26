@@ -45,27 +45,18 @@ namespace ColyseusDemo.Checkers
             return isCorrectSideDisk;
         }
 
-        internal void MoveDisk(MapSquare targetMapSquare)
-        {
-            float targetXPosition = targetMapSquare.DiskPlace.x;
-            float targetZPosition = targetMapSquare.DiskPlace.z;
-            Transform diskTransform = _takenDisk.transform;
-
-            _takenDisk.CurrentMapSquare.Free();
-
-            diskTransform.position = new Vector3(targetXPosition, diskTransform.position.y, targetZPosition);
-            _takenDisk.SetCurrentMapSquare(targetMapSquare);
-
-            SendMoveMessage(targetMapSquare);
-            MoveMade?.Invoke();
-        }
-
         internal void DropDisk()
         {
             if (_takenDisk.gameObject.TryGetComponent<Renderer>(out Renderer renderer))
                 renderer.material.color = _takenDisk.DefaultColor;
 
             _takenDisk = null;
+        }
+
+        internal void MovePlayerDisk(MapSquare targetMapSquare)
+        {
+            MoveDisk(_takenDisk, targetMapSquare);
+            SendMoveMessage(targetMapSquare);
         }
 
         internal void MoveEnemyDisk(string jsonMoveData)
@@ -88,9 +79,12 @@ namespace ColyseusDemo.Checkers
             float targetZPosition = targetMapSquare.DiskPlace.z;
             Transform diskTransform = disk.transform;
 
-            diskTransform.position = new Vector3(targetXPosition, diskTransform.position.y, targetZPosition);
+            disk.CurrentMapSquare.Free();
             targetMapSquare.Occupy(disk.IsWhite);
 
+            diskTransform.position = new Vector3(targetXPosition, diskTransform.position.y, targetZPosition);
+            disk.SetCurrentMapSquare(targetMapSquare);
+            
             MoveMade?.Invoke();
         }
 

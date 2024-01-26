@@ -13,6 +13,9 @@ public partial class Player : Schema {
 	public string login = default(string);
 
 	[Type(1, "boolean")]
+	public bool isWhitePlayer = default(bool);
+
+	[Type(2, "boolean")]
 	public bool isTurnReady = default(bool);
 
 	/*
@@ -31,6 +34,18 @@ public partial class Player : Schema {
 		};
 	}
 
+	protected event PropertyChangeHandler<bool> __isWhitePlayerChange;
+	public Action OnIsWhitePlayerChange(PropertyChangeHandler<bool> __handler, bool __immediate = true) {
+		if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+		__callbacks.AddPropertyCallback(nameof(this.isWhitePlayer));
+		__isWhitePlayerChange += __handler;
+		if (__immediate && this.isWhitePlayer != default(bool)) { __handler(this.isWhitePlayer, default(bool)); }
+		return () => {
+			__callbacks.RemovePropertyCallback(nameof(isWhitePlayer));
+			__isWhitePlayerChange -= __handler;
+		};
+	}
+
 	protected event PropertyChangeHandler<bool> __isTurnReadyChange;
 	public Action OnIsTurnReadyChange(PropertyChangeHandler<bool> __handler, bool __immediate = true) {
 		if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
@@ -46,6 +61,7 @@ public partial class Player : Schema {
 	protected override void TriggerFieldChange(DataChange change) {
 		switch (change.Field) {
 			case nameof(login): __loginChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
+			case nameof(isWhitePlayer): __isWhitePlayerChange?.Invoke((bool) change.Value, (bool) change.PreviousValue); break;
 			case nameof(isTurnReady): __isTurnReadyChange?.Invoke((bool) change.Value, (bool) change.PreviousValue); break;
 			default: break;
 		}

@@ -45,7 +45,7 @@ namespace ColyseusDemo.Checkers
                         if (_selectedObject.TryGetComponent<MapSquare>(out MapSquare selectedMapSquare))
                         {
                             if (TrySelectMapSquare(selectedMapSquare))
-                                _disksMover.MoveDisk(_selectedMapSquare);
+                                _disksMover.MovePlayerDisk(_selectedMapSquare);
 
                             DropSelectedDisk();
                         }
@@ -108,7 +108,9 @@ namespace ColyseusDemo.Checkers
             UnhighlightDisk(_selectedDisk);
             UnhighlightAvailableSquares();
 
-            _disksMover.DropDisk();
+            if(_selectedDisk != null)
+                _disksMover.DropDisk();
+
             _selectedDisk = null;
 
             _isDraggingMode = false;

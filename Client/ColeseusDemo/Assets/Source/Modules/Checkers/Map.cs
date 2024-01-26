@@ -28,7 +28,6 @@ namespace ColyseusDemo.Checkers
                 {
                     _mapPlan[i, j] = _mapSquares[squareCounter];
                     _mapSquares[squareCounter].SetMapPosition(i, j);
-                    Debug.Log($"{_mapPlan[i, j].gameObject.name} w: {i}, l: {j}");
 
                     squareCounter++;
                 }

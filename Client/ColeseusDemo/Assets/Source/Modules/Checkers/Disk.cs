@@ -14,8 +14,11 @@ namespace ColyseusDemo.Checkers
         private void Awake() =>
             SetDefaultMaterial();
 
-        internal void SetCurrentMapSquare(MapSquare currentMapSquare) =>
+        internal void SetCurrentMapSquare(MapSquare currentMapSquare)
+        {
+            CurrentMapSquare.Free();
             CurrentMapSquare = currentMapSquare;
+        }
 
         internal void SetId(int id) =>
             Id = id;

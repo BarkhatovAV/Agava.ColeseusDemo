@@ -12,6 +12,9 @@ public partial class State : Schema {
 	[Type(0, "map", typeof(MapSchema<Player>))]
 	public MapSchema<Player> players = new MapSchema<Player>();
 
+	[Type(1, "array", typeof(ArraySchema<string>), "string")]
+	public ArraySchema<string> playersId = new ArraySchema<string>();
+
 	/*
 	 * Support for individual property change callbacks below...
 	 */
@@ -28,9 +31,22 @@ public partial class State : Schema {
 		};
 	}
 
+	protected event PropertyChangeHandler<ArraySchema<string>> __playersIdChange;
+	public Action OnPlayersIdChange(PropertyChangeHandler<ArraySchema<string>> __handler, bool __immediate = true) {
+		if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+		__callbacks.AddPropertyCallback(nameof(this.playersId));
+		__playersIdChange += __handler;
+		if (__immediate && this.playersId != null) { __handler(this.playersId, null); }
+		return () => {
+			__callbacks.RemovePropertyCallback(nameof(playersId));
+			__playersIdChange -= __handler;
+		};
+	}
+
 	protected override void TriggerFieldChange(DataChange change) {
 		switch (change.Field) {
 			case nameof(players): __playersChange?.Invoke((MapSchema<Player>) change.Value, (MapSchema<Player>) change.PreviousValue); break;
+			case nameof(playersId): __playersIdChange?.Invoke((ArraySchema<string>) change.Value, (ArraySchema<string>) change.PreviousValue); break;
 			default: break;
 		}
 	}

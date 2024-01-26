@@ -1,22 +1,24 @@
 import { Room, Client } from "colyseus";
-import { Schema, type, MapSchema } from "@colyseus/schema";
+import { Schema, type, MapSchema, ArraySchema } from "@colyseus/schema";
 
 export class Player extends Schema {
     @type("string") login = "";
-    //1
+    @type("boolean") isWhitePlayer = false;
     @type ("boolean") isTurnReady = false;
 }
 
 export class State extends Schema {
-    @type({ map: Player })
-    players = new MapSchema<Player>();
+    @type({ map: Player }) players = new MapSchema<Player>();
+    @type([ "string" ]) playersId = new ArraySchema<string>();
 
     something = "This attribute won't be sent to the client-side";
 
     createPlayer(sessionId: string, login) {
         const player = new Player();
         player.login = login;
+
         this.players.set(sessionId, player);
+        this.playersId.push(sessionId);
     }
 
     removePlayer(sessionId: string) {
@@ -26,6 +28,20 @@ export class State extends Schema {
     changeTurnReady(sessionId: string, value: boolean){
         const player = this.players.get(sessionId);
         player.isTurnReady = value;
+    }
+
+    TrySetSides(){
+        const playersSchema = this.players;
+        const playersId = this.playersId;
+
+        if(playersSchema.size == 2){
+            playersSchema.get(playersId.shift()).isWhitePlayer = true;
+            playersSchema.get(playersId.shift()).isWhitePlayer = false;
+        }
+    }
+
+    setIsWhite(){
+        this.players[0].isWhitePlayer = true;
     }
 }
 
@@ -37,19 +53,7 @@ export class StateHandlerRoom extends Room<State> {
 
         this.setState(new State());
 
-        //broadcast и except: client нужны только когда сообщение отправляется и сразу обрабатывается у клиента
-        this.onMessage("spawn", (client, data) => {
-            this.broadcast("spawn", JSON.stringify({
-                sessionID: client.sessionId, 
-                id: data.id, 
-                x: data.x, 
-                z: data.z}), {except: client});
-        });
-
         this.onMessage("moved", (client, data) => {
-            console.log("data.id", data.id);
-            console.log("data.targetMapWidthPosition", data.targetMapWidthPosition);
-            console.log("data.targetMapLengthPosition", data.targetMapLengthPosition);
             this.broadcast("moved", JSON.stringify({
                 sessionID: client.sessionId,
                 id: data.id,
@@ -57,6 +61,10 @@ export class StateHandlerRoom extends Room<State> {
                 targetMapLengthPosition: data.targetMapLengthPosition}), {except: client});
         });
         //3
+        this.onMessage("isWhitePlayer", (client, value) => {
+            //this.state.setSide(client.sessionId, value) 
+        });
+
         this.onMessage("isTurnReady", (client, value) => {
             this.state.changeTurnReady(client.sessionId, value)
         });
@@ -67,8 +75,12 @@ export class StateHandlerRoom extends Room<State> {
     }
 
     onJoin (client: Client, data) {
+        ///Я бы тут проверял, сколько уже игроков в комнате и рандомно выдавал бы сторону, но можно ли узнать обо всех, кто есть в комнате и использовать генератор псевдо случайных чисел?
         // client.send("hello", "world");
+
         this.state.createPlayer(client.sessionId, data.login);
+        this.state.TrySetSides();
+
         console.log(data.login);
     }
 

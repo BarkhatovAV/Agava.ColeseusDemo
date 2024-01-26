@@ -13,11 +13,13 @@ namespace ColyseusDemo.Checkers
 
         private MultiplayerManager _multiplayerManager;
         private PlayerSettings _playerSettings;
+        private Player _player;
         private Player _enemy;
         private bool IsTurnReady;
 
         public event Action LoginSet;
         public event Action<string> EnemyFound;
+        public event Action<bool> SideDetermined;
 
         public string Login => _playerSettings.Login;
 
@@ -26,7 +28,6 @@ namespace ColyseusDemo.Checkers
 
         private void OnDisable()
         {
-            _multiplayerManager.SideDetermined -= SetSide;
             _disksMover.MoveMade -= SetIsTurnReady;
             _multiplayerManager.EnemyFound -= SetEnemy;
             _multiplayerManager.DiskMoved -= _disksMover.MoveEnemyDisk;
@@ -39,18 +40,9 @@ namespace ColyseusDemo.Checkers
 
             _multiplayerManager = multiplayerManager;
 
-            SetSide(true);
-            _multiplayerManager.SideDetermined += SetSide;
             _multiplayerManager.EnemyFound += SetEnemy;
+            _multiplayerManager.PlayerFound += SetPlayer;
             _multiplayerManager.DiskMoved += _disksMover.MoveEnemyDisk;
-        }
-
-        private void SetSide(bool isWhitePlayer)
-        {
-            IsWhitePlayer = isWhitePlayer;
-            IsTurnReady = isWhitePlayer;
-
-            _disksMover.SetSideDisks(isWhitePlayer);
         }
 
         private void SetIsTurnReady()
@@ -63,6 +55,37 @@ namespace ColyseusDemo.Checkers
         {
             _enemy = enemy;
             EnemyFound?.Invoke(_enemy.login);
+            _enemy.OnIsWhitePlayerChange(SetAlternativeSide);
+        }
+
+        private void SetPlayer(Player player)
+        {
+            _player = player;
+            _player.OnIsWhitePlayerChange(SetSide);
+        }
+
+        private void SetSide(bool currentValue, bool previousValue)
+        {
+            IsWhitePlayer = currentValue;
+            IsTurnReady = IsWhitePlayer;
+
+            _disksMover.SetSideDisks(IsWhitePlayer);
+            SideDetermined?.Invoke(IsWhitePlayer);
+            _selector.enabled = IsWhitePlayer;
+
+            Debug.Log("Ваша сторона белая: " + IsWhitePlayer);
+        }
+
+        private void SetAlternativeSide(bool currentValue, bool previousValue)
+        {
+            IsWhitePlayer = !currentValue;
+            IsTurnReady = IsWhitePlayer;
+
+            _disksMover.SetSideDisks(IsWhitePlayer);
+            SideDetermined?.Invoke(IsWhitePlayer);
+            _selector.enabled = IsWhitePlayer;
+
+            Debug.Log("Ваша alt сторона белая: " + IsWhitePlayer);
         }
     }
 }
