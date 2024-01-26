@@ -20,7 +20,6 @@ namespace ColyseusDemo.Checkers
         private MapSquare _highlightedMapSquare;
         private MapSquare _selectedMapSquare;
         private Disk _selectedDisk;
-        private bool _isDraggingMode = false;
         private bool _isCorrectDisk = false;
         private bool _isCorrectMapSquare = false;
 
@@ -40,12 +39,12 @@ namespace ColyseusDemo.Checkers
 
                 if (Input.GetMouseButtonDown(0))
                 {
-                    if (_isDraggingMode)
+                    if (_selectedDisk != null)
                     {
                         if (_selectedObject.TryGetComponent<MapSquare>(out MapSquare selectedMapSquare))
                         {
                             if (TrySelectMapSquare(selectedMapSquare))
-                                _disksMover.MovePlayerDisk(_selectedMapSquare);
+                                _disksMover.MovePlayerDisk(_selectedDisk, _selectedMapSquare);
 
                             DropSelectedDisk();
                         }
@@ -99,21 +98,19 @@ namespace ColyseusDemo.Checkers
 
             _availableSquares = _moveRules.GetAvailableSquares(disk.CurrentMapSquare);
             HighlightAvailableSquares();
-
-            _isDraggingMode = true;
         }
 
         private void DropSelectedDisk()
         {
-            UnhighlightDisk(_selectedDisk);
             UnhighlightAvailableSquares();
 
-            if(_selectedDisk != null)
+            if (_selectedDisk != null)
+            {
+                UnhighlightDisk(_selectedDisk);
                 _disksMover.DropDisk();
+            }
 
             _selectedDisk = null;
-
-            _isDraggingMode = false;
         }
 
         private void HighlightDisk(Disk selectedDisk)
@@ -135,8 +132,12 @@ namespace ColyseusDemo.Checkers
             if (_isCorrectMapSquare)
             {
                 _selectedMapSquare = mapSquare;
+                _highlightedMapSquare = null;
                 UnhighlightAvailableSquares();
-                _isDraggingMode = false;
+            }
+            else
+            {
+                DropSelectedDisk();
             }
 
             return _isCorrectMapSquare;
@@ -153,8 +154,11 @@ namespace ColyseusDemo.Checkers
             }
             else
             {
-                UnhighlightMapSquare();
-                _highlightedMapSquare = null;
+                if (_highlightedMapSquare != null)
+                {
+                    UnhighlightMapSquare();
+                    _highlightedMapSquare = null;
+                }
 
                 return false;
             }

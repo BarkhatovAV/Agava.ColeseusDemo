@@ -67,8 +67,6 @@ namespace ColyseusDemo.Multiplayer
 
             players.ForEach((key, player) =>
             {
-                print(player.login);
-
                 if (key != _room.SessionId)
                     EnemyFound?.Invoke(player);
                 else

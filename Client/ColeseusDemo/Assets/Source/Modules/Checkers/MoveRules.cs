@@ -68,14 +68,12 @@ namespace ColyseusDemo.Checkers
 
                 if (IsMapSquareOccupied(mapSquare))
                 {
-                    Debug.Log($"Занят! Ширина: {widthPosition}, длина: {lengthPosition}, , имя: {mapSquare.gameObject.name}");
                     adjacentSquare = null;
 
                     return false;
                 }
                 else
                 {
-                    Debug.Log($"Длина: {lengthPosition}, ширина: {widthPosition}");
                     adjacentSquare = mapSquare;
 
                     return true;
@@ -99,12 +97,12 @@ namespace ColyseusDemo.Checkers
         }
 
         private bool IsMapSquareExist(int widthPosition, int lengthPosition) =>
-            widthPosition > 0 && lengthPosition > 0 && widthPosition < 8 && lengthPosition < 8;
+            widthPosition >= 0 && lengthPosition >= 0 && widthPosition < 8 && lengthPosition < 8;
 
         private bool TryCutDown()
         {
             Debug.Log("Пытается срубить");
-            return true;
+            return false;
         }
     }
 }
