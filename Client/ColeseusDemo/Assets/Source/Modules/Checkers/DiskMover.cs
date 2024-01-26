@@ -14,7 +14,6 @@ namespace ColyseusDemo.Checkers
 
         private List<Disk> _sideDisks = new List<Disk>();
         private MoveInfo _moveInfo = new MoveInfo();
-        private Disk _takenDisk;
 
         public event Action MoveMade;
 
@@ -33,30 +32,13 @@ namespace ColyseusDemo.Checkers
             _sideDisks = availableDisks.ToList();
         }
 
-        internal bool TryTakeDisk(Disk disk)
+        internal bool IsCorrectDisk(Disk disk) =>
+            _sideDisks.Contains(disk);
+
+        internal void MovePlayerDisk(Disk disk, MapSquare targetMapSquare)
         {
-            bool isCorrectSideDisk = _sideDisks.Contains(disk);
-
-            if (isCorrectSideDisk)
-                _takenDisk = disk;
-            else
-                _takenDisk = null;
-
-            return isCorrectSideDisk;
-        }
-
-        internal void DropDisk()
-        {
-            if (_takenDisk.gameObject.TryGetComponent<Renderer>(out Renderer renderer))
-                renderer.material.color = _takenDisk.DefaultColor;
-
-            _takenDisk = null;
-        }
-
-        internal void MovePlayerDisk(MapSquare targetMapSquare)
-        {
-            MoveDisk(_takenDisk, targetMapSquare);
-            SendMoveMessage(targetMapSquare);
+            MoveDisk(disk, targetMapSquare);
+            SendMoveMessage(disk, targetMapSquare);
         }
 
         internal void MoveEnemyDisk(string jsonMoveData)
@@ -84,13 +66,13 @@ namespace ColyseusDemo.Checkers
 
             diskTransform.position = new Vector3(targetXPosition, diskTransform.position.y, targetZPosition);
             disk.SetCurrentMapSquare(targetMapSquare);
-            
+
             MoveMade?.Invoke();
         }
 
-        private void SendMoveMessage(MapSquare targetMapSquare)
+        private void SendMoveMessage(Disk movingDisk, MapSquare targetMapSquare)
         {
-            _moveInfo.id = _takenDisk.Id;
+            _moveInfo.id = movingDisk.Id;
             SetCoordinates(targetMapSquare);
 
             MultiplayerManager.Instance.TrySendMessage(MessagesNames.Move, _moveInfo);
