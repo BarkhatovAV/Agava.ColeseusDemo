@@ -4,19 +4,19 @@ namespace ColyseusDemo.Checkers
 {
     [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(Renderer))]
-    public class MapSquare : MonoBehaviour
+    internal class MapSquare : MonoBehaviour
     {
-        [field: SerializeField] public bool IsWhiteOccupied { get; private set; }
-        [field: SerializeField] public bool IsBlackOccupied { get; private set; }
-        [field: SerializeField] public bool IsOccupied { get; private set; }
+        [field: SerializeField] internal bool IsWhiteOccupied { get; private set; }
+        [field: SerializeField] internal bool IsBlackOccupied { get; private set; }
+        [field: SerializeField] internal bool IsOccupied { get; private set; }
 
-        public int WidthPosition { get; private set; }
-        public int LengthPosition { get; private set; }
-        public Color DefaultColor { get; private set; }
+        internal int WidthPosition { get; private set; }
+        internal int LengthPosition { get; private set; }
+        internal Color DefaultColor { get; private set; }
 
         [SerializeField] private Transform _diskPlace;
 
-        public Vector3 DiskPlace => _diskPlace.transform.position;
+        internal Vector3 DiskPlace => _diskPlace.transform.position;
 
         private void Awake()
         {

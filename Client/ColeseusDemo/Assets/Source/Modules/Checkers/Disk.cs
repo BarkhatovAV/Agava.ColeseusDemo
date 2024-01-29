@@ -3,13 +3,13 @@ using UnityEngine;
 namespace ColyseusDemo.Checkers
 {
     [RequireComponent(typeof(Collider))]
-    public class Disk : MonoBehaviour
+    internal class Disk : MonoBehaviour
     {
-        [field: SerializeField] public bool IsWhite { get; private set; }
-        [field: SerializeField] public MapSquare CurrentMapSquare { get; private set; }
+        [field: SerializeField] internal bool IsWhite { get; private set; }
+        [field: SerializeField] internal MapSquare CurrentMapSquare { get; private set; }
 
-        public int Id { get; private set; }
-        public Color DefaultColor { get; private set; }
+        internal int Id { get; private set; }
+        internal Color DefaultColor { get; private set; }
 
         private void Awake() =>
             SetDefaultMaterial();

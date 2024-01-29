@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 474823070719413547}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.24, y: 0.1817, z: -8.93}
-  m_LocalScale: {x: 1.5, y: 0.26168, z: 1.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 0.3, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4098785658612980846}
@@ -120,9 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <IsWhite>k__BackingField: 0
-  CurrentMapSquare: {fileID: 0}
-  Id: 0
-  _draggingMaterial: {fileID: 2100000, guid: 8b681fa8740f21e4b9d1d6625370afe0, type: 2}
+  <CurrentMapSquare>k__BackingField: {fileID: 0}
 --- !u!1 &595291951163397409
 GameObject:
   m_ObjectHideFlags: 0

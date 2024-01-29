@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ColyseusDemo.Checkers
 {
-    public class MoveRules : MonoBehaviour
+    internal class MoveRules : MonoBehaviour
     {
         private const string RightDirectionName = "right";
         private const string LeftDirectionName = "left";
@@ -12,11 +12,6 @@ namespace ColyseusDemo.Checkers
         private const int WhiteLeftLengthIndicator = 1;
         private const int WhiteRightWidthIndicator = -1;
         private const int WhiteRightLengthIndicator = -1;
-
-        private const int BlackLeftWidthIndicator = -1;
-        private const int BlackLeftLengthIndicator = -1;
-        private const int BlackRightWidthIndicator = 1;
-        private const int BlackRightLengthIndicator = -1;
 
         [SerializeField] private Map _map;
 

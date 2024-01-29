@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ColyseusDemo.UI
 {
-    public class GameUI : MonoBehaviour
+    internal class GameUI : MonoBehaviour
     {
         [SerializeField] private TMP_Text _playerLoginPlace;
         [SerializeField] private TMP_Text _enemyLoginPlace;

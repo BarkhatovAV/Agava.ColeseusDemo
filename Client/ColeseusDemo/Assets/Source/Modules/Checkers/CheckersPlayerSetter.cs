@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ColyseusDemo.Checkers
 {
-    public class CheckersPlayerSetter : MonoBehaviour
+    internal class CheckersPlayerSetter : MonoBehaviour
     {
         [SerializeField] private CheckersPlayer _checkersPlayer;
         [SerializeField] private Transform _blackPlayerPlace;

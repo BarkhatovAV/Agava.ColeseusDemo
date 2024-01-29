@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace ColyseusDemo.Checkers
 {
-    public class DiskMover : MonoBehaviour
+    internal class DiskMover : MonoBehaviour
     {
         private const float PermissibleMovementInaccuracy = 0.01f;
 
@@ -20,7 +20,7 @@ namespace ColyseusDemo.Checkers
         private MoveInfo _moveInfo = new MoveInfo();
         private Coroutine _moveCoroutine;
 
-        public event Action MoveMade;
+        internal event Action MoveMade;
 
         private void Awake()
         {
@@ -73,8 +73,7 @@ namespace ColyseusDemo.Checkers
             if (_moveCoroutine != null)
                 StopCoroutine(_moveCoroutine);
 
-            _moveCoroutine = StartCoroutine(SmoothlyMove(diskTransform, targetPosition)); 
-            //diskTransform.position = new Vector3(targetXPosition, diskTransform.position.y, targetZPosition);
+            _moveCoroutine = StartCoroutine(SmoothlyMove(diskTransform, targetPosition));
             disk.SetCurrentMapSquare(targetMapSquare);
 
             MoveMade?.Invoke();

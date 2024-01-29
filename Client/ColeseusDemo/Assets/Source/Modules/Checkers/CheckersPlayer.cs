@@ -19,7 +19,8 @@ namespace ColyseusDemo.Checkers
 
         public event Action LoginSet;
         public event Action<string> EnemyFound;
-        public event Action<bool> SideDetermined;
+
+        internal event Action<bool> SideDetermined;
 
         public string Login => _playerSettings.Login;
 

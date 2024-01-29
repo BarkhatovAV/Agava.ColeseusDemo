@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ColyseusDemo.Checkers
 {
     [RequireComponent(typeof(Camera))]
-    public class Selector : MonoBehaviour
+    internal class Selector : MonoBehaviour
     {
         [SerializeField] private DiskMover _disksMover;
         [SerializeField] private MoveRules _moveRules;
