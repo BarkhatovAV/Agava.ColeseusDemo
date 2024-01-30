@@ -57,7 +57,7 @@ namespace ColyseusDemo.Checkers
         {
             _enemy = enemy;
             EnemyFound?.Invoke(_enemy.login);
-            _enemy.OnIsWhitePlayerChange(SetAlternativeSide);
+            //_enemy.OnIsWhitePlayerChange(SetAlternativeSide);
         }
 
         private void SetPlayer(Player player)

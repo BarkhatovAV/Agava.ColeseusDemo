@@ -3,7 +3,7 @@ import { Schema, type, MapSchema, ArraySchema } from "@colyseus/schema";
 
 export class Player extends Schema {
     @type("string") login = "";
-    @type("boolean") isWhitePlayer = false;
+    @type("boolean") isWhitePlayer;
 }
 
 export class State extends Schema {
@@ -27,16 +27,8 @@ export class State extends Schema {
         const playersId = this.playersId;
 
         if(playersSchema.size == 2){
-            //playersId.pop()
-            //playersId.shift()
-            //playersSchema[0].isWhitePlayer = true;
-            //playersSchema[1].isWhitePlayer = false;
-            console.log("first");
-            console.log(playersSchema.get(playersId[0]).login + "here");
-            console.log("second");
-            console.log(playersSchema.get(playersId[1]).login + "there");
-            playersSchema.get(playersId[0]).isWhitePlayer = true;
-            playersSchema.get(playersId[1]).isWhitePlayer = false;
+            playersSchema.get(playersId[0]).isWhitePlayer = false;
+            playersSchema.get(playersId[1]).isWhitePlayer = true;
         }
     }
 }
