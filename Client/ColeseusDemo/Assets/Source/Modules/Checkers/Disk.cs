@@ -1,32 +1,58 @@
+using System.Collections;
 using UnityEngine;
 
 namespace ColyseusDemo.Checkers
 {
-    [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(Renderer))]
     internal class Disk : MonoBehaviour
     {
-        [field: SerializeField] internal bool IsWhite { get; private set; }
-        [field: SerializeField] internal MapSquare CurrentMapSquare { get; private set; }
-
+        internal MapSquare CurrentMapSquare { get; private set; }
+        internal bool IsWhite { get; private set; }
         internal int Id { get; private set; }
-        internal Color DefaultColor { get; private set; }
+        internal int WidthPosition { get; private set; }
+        internal int LengthPosition { get; private set; }
+        internal Material DefaultMaterial { get; private set; }
 
-        private void Awake() =>
-            SetDefaultMaterial();
+        private Coroutine _coroutine;
+
+        internal void Construct(MapSquare currentMapSquare, bool isWhite, Material material)
+        {
+            CurrentMapSquare = currentMapSquare;
+            IsWhite = isWhite;
+            DefaultMaterial = material;
+
+            SetMaterial(material);
+            SetCurrentMapSquare(currentMapSquare);
+        }
 
         internal void SetCurrentMapSquare(MapSquare currentMapSquare)
         {
-            CurrentMapSquare.Free();
             CurrentMapSquare = currentMapSquare;
+
+            WidthPosition = currentMapSquare.WidthPosition;
+            LengthPosition = currentMapSquare.LengthPosition;
+            currentMapSquare.Occupy(IsWhite);
         }
+
+        internal void SmoothlyMove(Transform movableObject, Vector3 target, float moveSpeed) =>
+            StartCoroutine(FloatDown(movableObject, target, moveSpeed));
 
         internal void SetId(int id) =>
             Id = id;
 
-        private void SetDefaultMaterial()
+        private IEnumerator FloatDown(Transform movableObject, Vector3 target, float moveSpeed)
         {
-            if (gameObject.TryGetComponent<Renderer>(out Renderer renderer))
-                DefaultColor = renderer.material.color;
+            while (movableObject.position.y > target.y + 0.05f)
+            {
+                movableObject.position = Vector3.Lerp(movableObject.position, target, moveSpeed * Time.deltaTime);
+
+                yield return null;
+            }
+
+            movableObject.position = target;
         }
+
+        private void SetMaterial(Material material) =>
+            GetComponent<Renderer>().material = material;
     }
 }

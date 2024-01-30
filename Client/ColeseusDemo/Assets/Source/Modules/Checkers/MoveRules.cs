@@ -13,7 +13,7 @@ namespace ColyseusDemo.Checkers
         private const int WhiteRightWidthIndicator = -1;
         private const int WhiteRightLengthIndicator = -1;
 
-        [SerializeField] private Map _map;
+        [SerializeField] private MapGenerator _mapGenerator;
 
         private MapSquare _questionDiskPosition;
 
@@ -59,7 +59,7 @@ namespace ColyseusDemo.Checkers
 
             if (IsMapSquareExist(widthPosition, lengthPosition))
             {
-                MapSquare mapSquare = _map.GetMapSquare(widthPosition, lengthPosition);
+                MapSquare mapSquare = _mapGenerator.GetMapSquare(widthPosition, lengthPosition);
 
                 if (IsMapSquareOccupied(mapSquare))
                 {

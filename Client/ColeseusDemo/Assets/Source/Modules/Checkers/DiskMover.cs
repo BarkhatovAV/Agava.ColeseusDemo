@@ -13,7 +13,7 @@ namespace ColyseusDemo.Checkers
         private const float PermissibleMovementInaccuracy = 0.01f;
 
         [SerializeField] private List<Disk> _allDisks = new List<Disk>();
-        [SerializeField] private Map _map;
+        [SerializeField] private MapGenerator _mapGenerator;
         [SerializeField] private float _diskMoveSpeed;
 
         private List<Disk> _sideDisks = new List<Disk>();
@@ -22,20 +22,11 @@ namespace ColyseusDemo.Checkers
 
         internal event Action MoveMade;
 
-        private void Awake()
-        {
-            for (int i = 0; i < _allDisks.Count; i++)
-                _allDisks[i].SetId(i);
-        }
+        private void OnEnable() =>
+            _mapGenerator.DisksPlaced += SetSideDisks;
 
-        internal void SetSideDisks(bool isWhitePlayer)
-        {
-            var availableDisks = from Disk disk in _allDisks
-                                 where disk.IsWhite == isWhitePlayer
-                                 select disk;
-
-            _sideDisks = availableDisks.ToList();
-        }
+        private void OnDisable() =>
+            _mapGenerator.DisksPlaced -= SetSideDisks;
 
         internal bool IsCorrectDisk(Disk disk) =>
             _sideDisks.Contains(disk);
@@ -55,9 +46,26 @@ namespace ColyseusDemo.Checkers
             int targetMapLengthPosition = moveInfo.targetMapLengthPosition;
 
             Disk movableDisk = _allDisks[diskId];
-            MapSquare targetMapSquare = _map.GetMapSquare(targetMapWidthPosition, targetMapLengthPosition);
+            MapSquare targetMapSquare = _mapGenerator.GetMapSquare(targetMapWidthPosition, targetMapLengthPosition);
 
             MoveDisk(movableDisk, targetMapSquare);
+        }
+
+        private void SetSideDisks(bool isWhitePlayer)
+        {
+            SetDisksIds();
+
+            var availableDisks = from Disk disk in _allDisks
+                                 where disk.IsWhite == isWhitePlayer
+                                 select disk;
+
+            _sideDisks = availableDisks.ToList();
+        }
+
+        private void SetDisksIds()
+        {
+            for (int i = 0; i < _allDisks.Count; i++)
+                _allDisks[i].SetId(i);
         }
 
         private void MoveDisk(Disk disk, MapSquare targetMapSquare)

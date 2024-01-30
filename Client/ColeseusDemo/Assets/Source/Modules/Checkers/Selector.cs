@@ -117,7 +117,7 @@ namespace ColyseusDemo.Checkers
         private void UnhighlightDisk(Disk selectedDisk)
         {
             if (selectedDisk.gameObject.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-                renderer.material.color = selectedDisk.DefaultColor;
+                renderer.material = selectedDisk.DefaultMaterial;
         }
 
         private bool TrySelectMapSquare(MapSquare mapSquare)
@@ -188,7 +188,7 @@ namespace ColyseusDemo.Checkers
             foreach (MapSquare square in _availableSquares)
             {
                 if (square.gameObject.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-                    renderer.material.color = square.DefaultColor;
+                    renderer.material = square.DefaultMaterial;
             }
 
             _availableSquares.Clear();

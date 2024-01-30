@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9031403551264717433}
   - component: {fileID: 3329377100125322322}
   - component: {fileID: 3935227191734414132}
-  - component: {fileID: 3699057268866458216}
+  - component: {fileID: 3872415359712747443}
   m_Layer: 0
   m_Name: Disk
   m_TagString: Untagged
@@ -107,7 +107,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0000001, y: 2, z: 1.0000002}
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!114 &3699057268866458216
+--- !u!114 &3872415359712747443
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,11 +116,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 474823070719413547}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b35ab71cf9117a740aa36f98e80d0295, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ccd0f3b8afe90546b19c618193c3e7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <IsWhite>k__BackingField: 0
-  <CurrentMapSquare>k__BackingField: {fileID: 0}
 --- !u!1 &595291951163397409
 GameObject:
   m_ObjectHideFlags: 0

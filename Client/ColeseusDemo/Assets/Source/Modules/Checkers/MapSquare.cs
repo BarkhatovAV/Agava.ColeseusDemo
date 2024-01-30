@@ -1,40 +1,39 @@
+using System.Collections;
 using UnityEngine;
 
 namespace ColyseusDemo.Checkers
 {
-    [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(Renderer))]
     internal class MapSquare : MonoBehaviour
     {
-        [field: SerializeField] internal bool IsWhiteOccupied { get; private set; }
-        [field: SerializeField] internal bool IsBlackOccupied { get; private set; }
-        [field: SerializeField] internal bool IsOccupied { get; private set; }
-
+        internal bool IsOccupied { get; private set; } = false;
+        internal bool IsWhiteOccupied { get; private set; } = false;
+        internal bool IsBlackOccupied { get; private set; } = false;
         internal int WidthPosition { get; private set; }
         internal int LengthPosition { get; private set; }
-        internal Color DefaultColor { get; private set; }
+        internal Material DefaultMaterial { get; private set; }
 
         [SerializeField] private Transform _diskPlace;
 
         internal Vector3 DiskPlace => _diskPlace.transform.position;
 
-        private void Awake()
+        internal void Construct(int widthPosition, int lengthPosition)
         {
-            Renderer renderer = GetComponent<Renderer>();
-            DefaultColor = renderer.material.color;
+            WidthPosition = widthPosition;
+            LengthPosition = lengthPosition;
         }
 
-        internal void SetMapPosition(int mapWidthPosition, int mapLengthPosition)
+        internal void SetDefaultMaterial(Material material)
         {
-            WidthPosition = mapWidthPosition;
-            LengthPosition = mapLengthPosition;
+            DefaultMaterial = material;
+            SetMaterial(material);
         }
 
-        internal void Occupy(bool isWhiteOccupied)
+        internal void Occupy(bool isOccupantWhite)
         {
             IsOccupied = true;
-            IsWhiteOccupied = isWhiteOccupied;
-            IsBlackOccupied = !isWhiteOccupied;
+            IsWhiteOccupied = isOccupantWhite;
+            IsBlackOccupied = !isOccupantWhite;
         }
 
         internal void Free()
@@ -43,5 +42,23 @@ namespace ColyseusDemo.Checkers
             IsWhiteOccupied = false;
             IsBlackOccupied = false;
         }
+
+        internal void SmoothlyMove(Transform movableObject, Vector3 target, float moveSpeed) =>
+            StartCoroutine(FloatDown(movableObject, target, moveSpeed));
+
+        private IEnumerator FloatDown(Transform movableObject, Vector3 target, float moveSpeed)
+        {
+            while (movableObject.position.y > target.y + 0.05f)
+            {
+                movableObject.position = Vector3.Lerp(movableObject.position, target, moveSpeed * Time.deltaTime);
+
+                yield return null;
+            }
+
+            movableObject.position = target;
+        }
+
+        private void SetMaterial(Material material) =>
+            GetComponent<Renderer>().material = material;
     }
 }

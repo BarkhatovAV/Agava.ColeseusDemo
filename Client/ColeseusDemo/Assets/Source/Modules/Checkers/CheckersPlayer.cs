@@ -31,6 +31,7 @@ namespace ColyseusDemo.Checkers
         {
             _disksMover.MoveMade -= SetIsTurnReady;
             _multiplayerManager.EnemyFound -= SetEnemy;
+            _multiplayerManager.PlayerFound -= SetPlayer;
             _multiplayerManager.DiskMoved -= _disksMover.MoveEnemyDisk;
         }
 
@@ -69,9 +70,10 @@ namespace ColyseusDemo.Checkers
         {
             IsWhitePlayer = currentValue;
             IsTurnReady = IsWhitePlayer;
+            _player.isWhitePlayer = IsWhitePlayer;
 
-            _disksMover.SetSideDisks(IsWhitePlayer);
             SideDetermined?.Invoke(IsWhitePlayer);
+            //_disksMover.SetSideDisks(IsWhitePlayer);
             _selector.enabled = IsWhitePlayer;
 
             Debug.Log("Ваша сторона белая: " + IsWhitePlayer);
@@ -82,8 +84,8 @@ namespace ColyseusDemo.Checkers
             IsWhitePlayer = !currentValue;
             IsTurnReady = IsWhitePlayer;
 
-            _disksMover.SetSideDisks(IsWhitePlayer);
             SideDetermined?.Invoke(IsWhitePlayer);
+            //_disksMover.SetSideDisks(IsWhitePlayer);
             _selector.enabled = IsWhitePlayer;
 
             Debug.Log("Ваша alt сторона белая: " + IsWhitePlayer);

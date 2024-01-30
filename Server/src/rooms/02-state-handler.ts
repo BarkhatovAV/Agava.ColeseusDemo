@@ -27,8 +27,16 @@ export class State extends Schema {
         const playersId = this.playersId;
 
         if(playersSchema.size == 2){
-            playersSchema.get(playersId.shift()).isWhitePlayer = true;
-            playersSchema.get(playersId.shift()).isWhitePlayer = false;
+            //playersId.pop()
+            //playersId.shift()
+            //playersSchema[0].isWhitePlayer = true;
+            //playersSchema[1].isWhitePlayer = false;
+            console.log("first");
+            console.log(playersSchema.get(playersId[0]).login + "here");
+            console.log("second");
+            console.log(playersSchema.get(playersId[1]).login + "there");
+            playersSchema.get(playersId[0]).isWhitePlayer = true;
+            playersSchema.get(playersId[1]).isWhitePlayer = false;
         }
     }
 }

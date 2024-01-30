@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,11 +10,12 @@ namespace ColyseusDemo.Checkers
         [SerializeField] private const int MapWidth = 8;
         [SerializeField] private const int MapLength = 8;
 
-        [SerializeField] private List<TempSquare> _mapSquares = new List<TempSquare>();
-        [SerializeField] private List<TempDisk> _whiteDisks = new List<TempDisk>();
-        [SerializeField] private List<TempDisk> _blackDisks = new List<TempDisk>();
+        [SerializeField] private List<MapSquare> _mapSquares = new List<MapSquare>();
+        [SerializeField] private List<Disk> _whiteDisks = new List<Disk>();
+        [SerializeField] private List<Disk> _blackDisks = new List<Disk>();
         [SerializeField] private List<int> _whiteDisksPositions = new List<int>();
         [SerializeField] private List<int> _blackDisksPositions = new List<int>();
+        [SerializeField] private CheckersPlayer _checkersPlayer;
         [SerializeField] private Vector3 _startMapPosition;
         [SerializeField] private GameObject _mapSquarePrefab;
         [SerializeField] private Material _whiteMapSquareMaterial;
@@ -25,29 +27,42 @@ namespace ColyseusDemo.Checkers
         [SerializeField] private float _mapSquareLiftingHeight = 3f;
         [SerializeField] private float _diskLiftingHeight = 3f;
 
-        private TempSquare[,] _mapPlan = new TempSquare[MapWidth, MapLength];
-        private TempDisk[,] _disksPlan = new TempDisk[MapWidth, MapLength];
+        private MapSquare[,] _mapPlan = new MapSquare[MapWidth, MapLength];
+        private Disk[,] _disksPlan = new Disk[MapWidth, MapLength];
         private MapPlacer _mapPlacer;
         private DiskPlacer _diskPlacer;
+        private Coroutine _coroutine;
+
+        public event Action<bool> DisksPlaced;
 
         private void Awake()
         {
             _mapPlacer = new MapPlacer(MapWidth, _startMapPosition, _mapSquarePrefab, _whiteMapSquareMaterial, _blackMapSquareMaterial, _mapSquareAppearingSpeed, _mapSquareLiftingHeight);
             _diskPlacer = new DiskPlacer(_whiteDiskMaterial, _blackDiskMaterial, _diskAppearingSpeed, _diskLiftingHeight);
-
-            StartCoroutine(FillMapPlan());
         }
 
-        internal TempSquare GetMapSquare(int mapWidthPosition, int mapLengthPosition) =>
+        private void OnEnable() =>
+            _checkersPlayer.SideDetermined += PlaceMap;
+
+        private void OnDisable() =>
+            _checkersPlayer.SideDetermined -= PlaceMap;
+
+        internal MapSquare GetMapSquare(int mapWidthPosition, int mapLengthPosition) =>
             _mapPlan[mapWidthPosition, mapLengthPosition];
 
-        internal TempDisk GetDisk(int widthPosition, int lengthPosition) =>
+        internal Disk GetDisk(int widthPosition, int lengthPosition) =>
             _disksPlan[widthPosition, lengthPosition];
 
-        private IEnumerator FillMapPlan()
+        private void PlaceMap(bool isWhite)
+        {
+            if (_coroutine == null)
+                _coroutine = StartCoroutine(FillMapPlan(isWhite));
+        }
+
+        private IEnumerator FillMapPlan(bool isWhitePlayer)
         {
             int squareCount = 0;
-            TempSquare tempSquare;
+            MapSquare tempSquare;
             WaitForSeconds timeBetweenMapSquareAppearence = new WaitForSeconds(0.04f);
 
             for (int i = 0; i < MapWidth; i++)
@@ -66,13 +81,13 @@ namespace ColyseusDemo.Checkers
                 }
             }
 
-            yield return StartCoroutine(FillDisksPlan());
+            yield return StartCoroutine(FillDisksPlan(isWhitePlayer));
         }
 
-        private IEnumerator FillDisksPlan()
+        private IEnumerator FillDisksPlan(bool isWhitePlayer)
         {
-            TempDisk disk;
-            TempSquare mapSquare;
+            Disk disk;
+            MapSquare mapSquare;
             int widthPosition;
             int lengthPosition;
 
@@ -107,6 +122,8 @@ namespace ColyseusDemo.Checkers
 
                 yield return new WaitForSeconds(0.1f);
             }
+
+            DisksPlaced?.Invoke(isWhitePlayer);
         }
     }
 }

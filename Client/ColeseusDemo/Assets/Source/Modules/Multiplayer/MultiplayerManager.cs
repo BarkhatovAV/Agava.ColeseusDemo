@@ -67,10 +67,10 @@ namespace ColyseusDemo.Multiplayer
 
             players.ForEach((key, player) =>
             {
-                if (key != _room.SessionId)
-                    EnemyFound?.Invoke(player);
-                else
+                if (key == _room.SessionId)
                     PlayerFound?.Invoke(player);
+                else
+                    EnemyFound?.Invoke(player);
             });
         }
     }
