@@ -11,6 +11,7 @@ namespace ColyseusDemo.Checkers
     internal class DiskMover : MonoBehaviour
     {
         private const float PermissibleMovementInaccuracy = 0.01f;
+        private const int MovingDelta = 1;
 
         [SerializeField] private List<Disk> _allDisks = new List<Disk>();
         [SerializeField] private MapGenerator _mapGenerator;
@@ -78,11 +79,17 @@ namespace ColyseusDemo.Checkers
             disk.CurrentMapSquare.Free();
             targetMapSquare.Occupy(disk.IsWhite);
 
+            _mapGenerator.SetNewDiskPlanPosition(disk, targetMapSquare.WidthPosition, targetMapSquare.LengthPosition);
+
+            if (IsCutDown(disk, targetMapSquare))
+                CutDown(disk, targetMapSquare);
+
+            disk.SetCurrentMapSquare(targetMapSquare);
+
             if (_moveCoroutine != null)
                 StopCoroutine(_moveCoroutine);
 
             _moveCoroutine = StartCoroutine(SmoothlyMove(diskTransform, targetPosition));
-            disk.SetCurrentMapSquare(targetMapSquare);
 
             MoveMade?.Invoke();
         }
@@ -111,6 +118,31 @@ namespace ColyseusDemo.Checkers
 
                 yield return null;
             }
+        }
+
+        private bool IsCutDown(Disk disk, MapSquare targetMapSquare)
+        {
+            int currentPositionWidth = disk.CurrentMapSquare.WidthPosition;
+            int targetPositionWidth = targetMapSquare.WidthPosition;
+
+            return (Math.Abs(targetPositionWidth - currentPositionWidth) > MovingDelta);
+        }
+
+        private void CutDown(Disk disk, MapSquare targetMapSquare)
+        {
+            int currentPositionWidth = disk.CurrentMapSquare.WidthPosition;
+            int currentPositionLength = disk.CurrentMapSquare.LengthPosition;
+            int targetPositionWidth = targetMapSquare.WidthPosition;
+            int targetPositionLength = targetMapSquare.LengthPosition;
+
+            int enemyPositionWidth = (targetPositionWidth + currentPositionWidth) / 2;
+            int enemyPositionLength = (targetPositionLength + currentPositionLength) / 2;
+
+            Disk enemyDisk = _mapGenerator.GetDisk(enemyPositionWidth, enemyPositionLength);
+            MapSquare enemyMapSquare = _mapGenerator.GetMapSquare(enemyPositionWidth, enemyPositionLength);
+
+            enemyDisk.gameObject.SetActive(false);
+            enemyMapSquare.Free();
         }
     }
 }

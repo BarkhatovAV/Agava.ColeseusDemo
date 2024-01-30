@@ -57,7 +57,6 @@ namespace ColyseusDemo.Checkers
         {
             _enemy = enemy;
             EnemyFound?.Invoke(_enemy.login);
-            //_enemy.OnIsWhitePlayerChange(SetAlternativeSide);
         }
 
         private void SetPlayer(Player player)
@@ -73,22 +72,9 @@ namespace ColyseusDemo.Checkers
             _player.isWhitePlayer = IsWhitePlayer;
 
             SideDetermined?.Invoke(IsWhitePlayer);
-            //_disksMover.SetSideDisks(IsWhitePlayer);
             _selector.enabled = IsWhitePlayer;
 
             Debug.Log("Ваша сторона белая: " + IsWhitePlayer);
-        }
-
-        private void SetAlternativeSide(bool currentValue, bool previousValue)
-        {
-            IsWhitePlayer = !currentValue;
-            IsTurnReady = IsWhitePlayer;
-
-            SideDetermined?.Invoke(IsWhitePlayer);
-            //_disksMover.SetSideDisks(IsWhitePlayer);
-            _selector.enabled = IsWhitePlayer;
-
-            Debug.Log("Ваша alt сторона белая: " + IsWhitePlayer);
         }
     }
 }

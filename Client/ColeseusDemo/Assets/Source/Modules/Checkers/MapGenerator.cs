@@ -53,6 +53,12 @@ namespace ColyseusDemo.Checkers
         internal Disk GetDisk(int widthPosition, int lengthPosition) =>
             _disksPlan[widthPosition, lengthPosition];
 
+        internal void SetNewDiskPlanPosition(Disk disk, int newWidthPosition, int newLengthPosition)
+        {
+            _disksPlan[disk.WidthPosition, disk.LengthPosition] = null;
+            _disksPlan[newWidthPosition, newLengthPosition] = disk;
+        }
+
         private void PlaceMap(bool isWhite)
         {
             if (_coroutine == null)

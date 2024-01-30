@@ -61,43 +61,58 @@ namespace ColyseusDemo.Checkers
             {
                 MapSquare mapSquare = _mapGenerator.GetMapSquare(widthPosition, lengthPosition);
 
-                if (IsMapSquareOccupied(mapSquare))
+                if (mapSquare.IsOccupied)
                 {
-                    adjacentSquare = null;
-
-                    return false;
+                    TryCutDown(mapSquare, out adjacentSquare);
                 }
                 else
                 {
                     adjacentSquare = mapSquare;
-
-                    return true;
                 }
-            }
-
-            adjacentSquare = null;
-            return false;
-        }
-
-        private bool IsMapSquareOccupied(MapSquare mapSquare)
-        {
-            if (mapSquare.IsOccupied)
-            {
-                return true;
             }
             else
             {
-                return false;
+                adjacentSquare = null;
             }
+
+            return adjacentSquare != null;
         }
 
         private bool IsMapSquareExist(int widthPosition, int lengthPosition) =>
             widthPosition >= 0 && lengthPosition >= 0 && widthPosition < 8 && lengthPosition < 8;
 
-        private bool TryCutDown()
+        private bool TryCutDown(MapSquare occupiedMapSquare, out MapSquare adjacentSquare)
         {
-            Debug.Log("ѕытаетс€ срубить");
-            return false;
+            int questionDiskWidth = _questionDiskPosition.WidthPosition;
+            int questionDiskLength = _questionDiskPosition.LengthPosition;
+            int occupiedMapSquareWidth = occupiedMapSquare.WidthPosition;
+            int occupiedMapSquareLength = occupiedMapSquare.LengthPosition;
+
+            int adjacentSquareWidth = questionDiskWidth + (occupiedMapSquareWidth - questionDiskWidth) * 2;
+            int adjacentSquareLength = questionDiskLength + (occupiedMapSquareLength - questionDiskLength) * 2;
+
+            if (IsMapSquareExist(adjacentSquareWidth, adjacentSquareLength))
+            {
+                MapSquare checkedSquare = _mapGenerator.GetMapSquare(adjacentSquareWidth, adjacentSquareLength);
+
+                if (checkedSquare.IsOccupied)
+                {
+                    adjacentSquare = null;
+                }
+                else
+                {
+                    if (_isWhiteDisk == occupiedMapSquare.IsWhiteOccupied)
+                        adjacentSquare = null;
+                    else
+                        adjacentSquare = checkedSquare;
+                }
+            }
+            else
+            {
+                adjacentSquare = null;
+            }
+
+            return adjacentSquare != null;
         }
     }
 }
