@@ -8,9 +8,9 @@ namespace ColyseusDemo.Checkers
     {
         [SerializeField] private DiskMover _disksMover;
         [SerializeField] private MoveRules _moveRules;
-        [SerializeField] private Color _availableSquareColor;
-        [SerializeField] private Color _selectedSquareColor;
-        [SerializeField] private Color _takenDiskColor;
+        [SerializeField] private Material _availableSquareMaterial;
+        [SerializeField] private Material _selectedSquareMaterial;
+        [SerializeField] private Material _takenDiskMaterial;
 
         private Camera _camera;
         private Ray _ray;
@@ -111,7 +111,7 @@ namespace ColyseusDemo.Checkers
         private void HighlightDisk(Disk selectedDisk)
         {
             if (selectedDisk.gameObject.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-                renderer.material.color = _takenDiskColor;
+                renderer.material = _takenDiskMaterial;
         }
 
         private void UnhighlightDisk(Disk selectedDisk)
@@ -162,7 +162,7 @@ namespace ColyseusDemo.Checkers
         private void HighlightMapSquare(MapSquare mapSquare)
         {
             if (mapSquare.gameObject.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-                renderer.material.color = _selectedSquareColor;
+                renderer.material = _selectedSquareMaterial;
         }
 
         private void UnhighlightMapSquare()
@@ -170,7 +170,7 @@ namespace ColyseusDemo.Checkers
             if (_highlightedMapSquare != null)
             {
                 if (_highlightedMapSquare.gameObject.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-                    renderer.material.color = _availableSquareColor;
+                    renderer.material = _availableSquareMaterial;
             }
         }
 
@@ -179,7 +179,7 @@ namespace ColyseusDemo.Checkers
             foreach (MapSquare square in _availableSquares)
             {
                 if (square.gameObject.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-                    renderer.material.color = _availableSquareColor;
+                    renderer.material = _availableSquareMaterial;
             }
         }
 
