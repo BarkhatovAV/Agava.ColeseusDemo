@@ -3,24 +3,24 @@ using UnityEngine;
 
 namespace ColyseusDemo.Checkers
 {
-    internal abstract class Rules : MonoBehaviour
+    internal abstract class Rules
     {
-        [SerializeField] protected MapGenerator MapGenerator;
-
         protected AdjecentSquaresDeltas AdjecentSquaresDeltas;
+        protected MapGenerator MapGenerator;
         protected List<Square> AvailableSquares = new List<Square>();
         protected List<int> WidthDeltas;
         protected List<int> LengthDeltas;
-        protected Square CurrentDiskPosition;
+        protected Square CurrentDiskSquare;
 
-        protected bool IsCurrentDiskWhite => CurrentDiskPosition.IsWhiteOccupied;
-
-        private void Awake()
-        {
-            AdjecentSquaresDeltas = new AdjecentSquaresDeltas();
-        }
+        protected bool IsCurrentDiskWhite => CurrentDiskSquare.IsWhiteOccupied;
 
         internal abstract List<Square> GetAvailableSquares(Square currentDiskPosition);
+
+        internal Rules(AdjecentSquaresDeltas adjecentSquaresDeltas, MapGenerator mapGenerator)
+        {
+            AdjecentSquaresDeltas = adjecentSquaresDeltas;
+            MapGenerator = mapGenerator;
+        }
 
         protected abstract void FillAvailableSquares();
 

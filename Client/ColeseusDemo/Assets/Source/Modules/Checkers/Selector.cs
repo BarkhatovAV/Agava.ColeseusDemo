@@ -8,8 +8,8 @@ namespace ColyseusDemo.Checkers
     {
         [SerializeField] private CheckersCapturer _checkersCapturer;
         [SerializeField] private CheckersMover _checkersMover;
-        [SerializeField] private CaptureRules _captureRules;
-        [SerializeField] private MoveRules _moveRules;
+        private CaptureRules _captureRules;
+        private MoveRules _moveRules;
         [SerializeField] private DisksStorage _disksStorage;
         [SerializeField] private Highlighter _highlighter;
 
@@ -58,6 +58,12 @@ namespace ColyseusDemo.Checkers
                         OnMoveMode();
                 }
             }
+        }
+
+        internal void Construct(CaptureRules captureRules, MoveRules moveRules)
+        {
+            _captureRules = captureRules;
+            _moveRules = moveRules;
         }
 
         private void ContinueCapture(List<Square> availableSquares)

@@ -1,25 +1,33 @@
-using ColyseusDemo.Checkers;
 using TMPro;
 using UnityEngine;
 
-namespace ColyseusDemo.UI
+namespace ColyseusDemo.Checkers
 {
     internal class GameUI : MonoBehaviour
     {
         [SerializeField] private TMP_Text _playerLoginPlace;
         [SerializeField] private TMP_Text _enemyLoginPlace;
-        [SerializeField] private CheckersPlayer _checkersPlayer;
+
+        private CheckersPlayer _checkersPlayer;
 
         private void OnEnable()
         {
-            _checkersPlayer.EnemyFound += SetEnemyLogin;
-            _checkersPlayer.LoginSet += SetPlayerLogin;
+            if (_checkersPlayer != null)
+                _checkersPlayer.EnemyFound += SetEnemyLogin;
         }
 
         private void OnDisable()
         {
-            _checkersPlayer.EnemyFound -= SetEnemyLogin;
-            _checkersPlayer.LoginSet -= SetPlayerLogin;
+            if (_checkersPlayer != null)
+                _checkersPlayer.EnemyFound -= SetEnemyLogin;
+        }
+
+        internal void Construct(CheckersPlayer checkersPlayer)
+        {
+            _checkersPlayer = checkersPlayer;
+
+            SetPlayerLogin();
+            _checkersPlayer.EnemyFound += SetEnemyLogin;
         }
 
         private void SetPlayerLogin() =>

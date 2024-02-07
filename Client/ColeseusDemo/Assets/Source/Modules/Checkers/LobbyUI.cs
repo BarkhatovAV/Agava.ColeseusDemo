@@ -1,10 +1,9 @@
-using ColyseusDemo.Checkers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace ColyseusDemo.UI
+namespace ColyseusDemo.Checkers
 {
     public class LobbyUI : MonoBehaviour
     {

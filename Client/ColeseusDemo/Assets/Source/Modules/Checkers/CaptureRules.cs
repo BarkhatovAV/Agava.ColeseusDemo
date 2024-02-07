@@ -10,6 +10,8 @@ namespace ColyseusDemo.Checkers
         private List<Square> _suitableAdjecentSquares = new List<Square>();
         private Square _adjecentSquare;
 
+        internal CaptureRules(AdjecentSquaresDeltas adjecentSquaresDeltas, MapGenerator mapGenerator) : base(adjecentSquaresDeltas, mapGenerator) { }
+
         internal bool IsCutDown(Disk disk, Square targetMapSquare)
         {
             int currentPositionWidth = disk.CurrentSquare.WidthPosition;
@@ -20,7 +22,7 @@ namespace ColyseusDemo.Checkers
 
         internal override List<Square> GetAvailableSquares(Square currentDiskPosition)
         {
-            CurrentDiskPosition = currentDiskPosition;
+            CurrentDiskSquare = currentDiskPosition;
 
             AvailableSquares.Clear();
             _suitableAdjecentSquares.Clear();
@@ -48,8 +50,8 @@ namespace ColyseusDemo.Checkers
             {
                 _adjecentSquare = _suitableAdjecentSquares[i];
 
-                widthPosition = _adjecentSquare.WidthPosition + (_adjecentSquare.WidthPosition - CurrentDiskPosition.WidthPosition);
-                lengthPosition = _adjecentSquare.LengthPosition + (_adjecentSquare.LengthPosition - CurrentDiskPosition.LengthPosition);
+                widthPosition = _adjecentSquare.WidthPosition + (_adjecentSquare.WidthPosition - CurrentDiskSquare.WidthPosition);
+                lengthPosition = _adjecentSquare.LengthPosition + (_adjecentSquare.LengthPosition - CurrentDiskSquare.LengthPosition);
 
                 if (TryGetAvailableMapSquare(out availableSquare, widthPosition, lengthPosition))
                     AvailableSquares.Add(availableSquare);
@@ -68,8 +70,8 @@ namespace ColyseusDemo.Checkers
         private bool TryGetSuitableAdjecentSquare(out Square adjecentSquare, int widthDelta, int lengthDelta)
         {
             Square suitableSquare = null;
-            int currentDiskWidth = CurrentDiskPosition.WidthPosition;
-            int currentDiskLength = CurrentDiskPosition.LengthPosition;
+            int currentDiskWidth = CurrentDiskSquare.WidthPosition;
+            int currentDiskLength = CurrentDiskSquare.LengthPosition;
 
             int adjecentSquareWidth = currentDiskWidth + widthDelta;
             int adjecentSquareLength = currentDiskLength + lengthDelta;

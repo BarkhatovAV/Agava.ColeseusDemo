@@ -12,7 +12,6 @@ namespace ColyseusDemo.Checkers
 
         [SerializeField] private DisksStorage _disksStorage;
         [SerializeField] private MapGenerator _mapGenerator;
-        [SerializeField] private CaptureRules _cutDownRules;
         [SerializeField] private float _diskMoveSpeed;
 
         private MoveInfo _moveInfo = new MoveInfo();
@@ -36,8 +35,8 @@ namespace ColyseusDemo.Checkers
 
             if (_disksStorage.TryGetDisk(out Disk movableDisk, diskId))
             {
-                _mapGenerator.TryGetSquare(out Square targetMapSquare, targetMapWidthPosition, targetMapLengthPosition);
-                MoveDisk(movableDisk, targetMapSquare);
+                _mapGenerator.TryGetSquare(out Square targetSquare, targetMapWidthPosition, targetMapLengthPosition);
+                MoveDisk(movableDisk, targetSquare);
             }
             else
             {

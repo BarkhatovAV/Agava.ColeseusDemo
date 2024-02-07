@@ -7,64 +7,64 @@ namespace ColyseusDemo.Checkers
 {
     internal class MapGenerator : MonoBehaviour
     {
-        private const int MapWidth = 8;
-        private const int MapLength = 8;
+        internal const int MapWidth = 8;
+        internal const int MapLength = 8;
 
-        [SerializeField] private List<Square> _mapSquares = new List<Square>();
+        [SerializeField] private List<Square> _squares = new List<Square>();
         [SerializeField] private List<Disk> _whiteDisks = new List<Disk>();
         [SerializeField] private List<Disk> _blackDisks = new List<Disk>();
         [SerializeField] private List<int> _whiteDisksPositions = new List<int>();
         [SerializeField] private List<int> _blackDisksPositions = new List<int>();
-        [SerializeField] private CheckersPlayer _checkersPlayer;
-        [SerializeField] private Vector3 _startMapPosition;
-        [SerializeField] private GameObject _mapSquarePrefab;
-        [SerializeField] private Material _whiteMapSquareMaterial;
-        [SerializeField] private Material _blackMapSquareMaterial;
-        [SerializeField] private Material _whiteDiskMaterial;
-        [SerializeField] private Material _blackDiskMaterial;
-        [SerializeField] private float _mapSquareAppearingSpeed = 8f;
-        [SerializeField] private float _diskAppearingSpeed = 8f;
-        [SerializeField] private float _mapSquareLiftingHeight = 3f;
-        [SerializeField] private float _diskLiftingHeight = 3f;
+        [SerializeField] private WaitForSeconds _timeBetweenDiskAvailable = new WaitForSeconds(0.1f);
+        [SerializeField] private WaitForSeconds _timeBetweenSquareAvailable = new WaitForSeconds(0.04f);
 
         private Square[,] _mapPlan = new Square[MapWidth, MapLength];
         private Disk[,] _disksPlan = new Disk[MapWidth, MapLength];
+        private CheckersPlayer _checkersPlayer;
         private MapPlacer _mapPlacer;
         private DiskPlacer _diskPlacer;
-        private Coroutine _coroutine;
-        private WaitForSeconds _timeBetweenDiskAvailable = new WaitForSeconds(0.1f);
+        private Coroutine _mapPlaceCoroutine;
 
         public event Action<bool> DisksPlaced;
 
-        private void Awake()
+        private void OnEnable()
         {
-            _mapPlacer = new MapPlacer(MapWidth, _startMapPosition, _mapSquarePrefab, _whiteMapSquareMaterial, _blackMapSquareMaterial, _mapSquareAppearingSpeed, _mapSquareLiftingHeight);
-            _diskPlacer = new DiskPlacer(_whiteDiskMaterial, _blackDiskMaterial, _diskAppearingSpeed, _diskLiftingHeight);
+            if (_checkersPlayer != null)
+                _checkersPlayer.SideDetermined += PlaceMap;
         }
 
-        private void OnEnable() =>
-            _checkersPlayer.SideDetermined += PlaceMap;
+        private void OnDisable()
+        {
+            if (_checkersPlayer != null)
+                _checkersPlayer.SideDetermined -= PlaceMap;
+        }
 
-        private void OnDisable() =>
-            _checkersPlayer.SideDetermined -= PlaceMap;
+        internal void Construct(CheckersPlayer checkersPlayer, MapPlacer mapPlacer, DiskPlacer diskPlacer)
+        {
+            _checkersPlayer = checkersPlayer;
+            _mapPlacer = mapPlacer;
+            _diskPlacer = diskPlacer;
+
+            _checkersPlayer.SideDetermined += PlaceMap;
+        }
 
         internal bool TryGetSquare(out Square square, int widthPosition, int lengthPosition)
         {
-            bool isMapSquareExist = IsCorrectPosition(widthPosition, lengthPosition);
+            bool isSquareExist = IsCorrectPosition(widthPosition, lengthPosition);
 
-            if (isMapSquareExist)
+            if (isSquareExist)
                 square = _mapPlan[widthPosition, lengthPosition];
             else
                 square = null;
 
-            return isMapSquareExist;
+            return isSquareExist;
         }
 
         internal bool TryGetDisk(out Disk disk, int widthPosition, int lengthPosition)
         {
-            bool isMapSquateExist = TryGetSquare(out Square mapSquare, widthPosition, lengthPosition);
+            bool isSquateExist = TryGetSquare(out Square mapSquare, widthPosition, lengthPosition);
 
-            if (isMapSquateExist && mapSquare.IsOccupied)
+            if (isSquateExist && mapSquare.IsOccupied)
                 disk = _disksPlan[widthPosition, lengthPosition];
             else
                 disk = null;
@@ -92,21 +92,20 @@ namespace ColyseusDemo.Checkers
 
         private void PlaceMap(bool isWhite)
         {
-            if (_coroutine == null)
-                _coroutine = StartCoroutine(FillMapPlan(isWhite));
+            if (_mapPlaceCoroutine == null)
+                _mapPlaceCoroutine = StartCoroutine(FillMapPlan(isWhite));
         }
 
         private IEnumerator FillMapPlan(bool isWhitePlayer)
         {
             int squareCount = 0;
             Square tempSquare;
-            WaitForSeconds timeBetweenMapSquareAppearence = new WaitForSeconds(0.04f);
 
             for (int i = 0; i < MapWidth; i++)
             {
                 for (int j = 0; j < MapLength; j++)
                 {
-                    tempSquare = _mapSquares[squareCount];
+                    tempSquare = _squares[squareCount];
 
                     tempSquare.Construct(i, j);
                     _mapPlan[i, j] = tempSquare;
@@ -114,7 +113,7 @@ namespace ColyseusDemo.Checkers
 
                     squareCount++;
 
-                    yield return timeBetweenMapSquareAppearence;
+                    yield return _timeBetweenSquareAvailable;
                 }
             }
 
@@ -124,22 +123,23 @@ namespace ColyseusDemo.Checkers
         private IEnumerator FillDisksPlan(bool isWhitePlayer)
         {
             Disk disk;
-            Square mapSquare;
+            Square square;
             int widthPosition;
             int lengthPosition;
+            int squareIndex;
 
             for (int i = 0; i < _blackDisks.Count; i++)
             {
                 disk = _blackDisks[i];
 
-                int mapSquareIndex = _blackDisksPositions[i];
-                mapSquare = _mapSquares[mapSquareIndex];
+                squareIndex = _blackDisksPositions[i];
+                square = _squares[squareIndex];
 
-                widthPosition = mapSquare.WidthPosition;
-                lengthPosition = mapSquare.LengthPosition;
+                widthPosition = square.WidthPosition;
+                lengthPosition = square.LengthPosition;
 
                 _disksPlan[widthPosition, lengthPosition] = disk;
-                _diskPlacer.PlaceDisk(disk, mapSquare, false);
+                _diskPlacer.PlaceDisk(disk, square, false);
 
                 yield return _timeBetweenDiskAvailable;
             }
@@ -148,14 +148,14 @@ namespace ColyseusDemo.Checkers
             {
                 disk = _whiteDisks[i];
 
-                int mapSquareIndex = _whiteDisksPositions[i];
-                mapSquare = _mapSquares[mapSquareIndex];
+                squareIndex = _whiteDisksPositions[i];
+                square = _squares[squareIndex];
 
-                widthPosition = mapSquare.WidthPosition;
-                lengthPosition = mapSquare.LengthPosition;
+                widthPosition = square.WidthPosition;
+                lengthPosition = square.LengthPosition;
 
                 _disksPlan[widthPosition, lengthPosition] = disk;
-                _diskPlacer.PlaceDisk(disk, mapSquare, true);
+                _diskPlacer.PlaceDisk(disk, square, true);
 
                 yield return _timeBetweenDiskAvailable;
             }

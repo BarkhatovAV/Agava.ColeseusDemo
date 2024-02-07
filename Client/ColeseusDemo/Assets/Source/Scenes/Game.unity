@@ -1422,6 +1422,66 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4329959893730231725, guid: d42ae0455c3836c46b1aeb5271494048, type: 3}
   m_PrefabInstance: {fileID: 434344571}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &441590038
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 441590040}
+  - component: {fileID: 441590039}
+  m_Layer: 0
+  m_Name: CheckersRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &441590039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441590038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac6c34830b6bffd4fb57f880fe77998c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mapGenerator: {fileID: 1405825712}
+  _selector: {fileID: 963194229}
+  _checkersCapturer: {fileID: 771833151}
+  _checkersMover: {fileID: 771833148}
+  _cameraSetter: {fileID: 1867971531}
+  _gameUI: {fileID: 848537192}
+  _whiteSquareMaterial: {fileID: 2100000, guid: 6b72d2ed8e5110f44a46d9b916ae5356, type: 2}
+  _blackSquareMaterial: {fileID: 2100000, guid: 9088805fe1a0d744c8eb627f3ee5606d, type: 2}
+  _whiteDiskMaterial: {fileID: 2100000, guid: 9d9284e8cef6cab4fa335b7de82038fa, type: 2}
+  _blackDiskMaterial: {fileID: 2100000, guid: 8a97ff0be4ae1184884306dd73ef62b0, type: 2}
+  _squareAppearingSpeed: 8
+  _diskAppearingSpeed: 8
+  _squareLiftingHeight: 3
+  _diskLiftingHeight: 3
+  _squarePrefab: {fileID: 288303936788119514, guid: d42ae0455c3836c46b1aeb5271494048, type: 3}
+  _startMapPosition: {x: 8.45, y: 0, z: 8.45}
+--- !u!4 &441590040
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441590038}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &450366593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1978,7 +2038,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 541682683}
-  - component: {fileID: 541682684}
   m_Layer: 0
   m_Name: CheckersPlayer
   m_TagString: Untagged
@@ -1994,33 +2053,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 541682682}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.0148347085, w: 0.99988997}
-  m_LocalPosition: {x: -17.7, y: 14.7, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 963194228}
   - {fileID: 771833147}
-  - {fileID: 918935241}
-  - {fileID: 705507995}
   - {fileID: 895684851}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 1.7}
---- !u!114 &541682684
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 541682682}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff3f0dd3b41589e42a232027b0e33a2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _disksMover: {fileID: 771833148}
-  _checkersCapturer: {fileID: 771833151}
-  _selector: {fileID: 963194229}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &565045666 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6859037138486975306, guid: 32b2144b3361a674f80c3ee75e29451f, type: 3}
@@ -2509,12 +2551,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.33083284, y: 0.62493974, z: -0.33083296, w: 0.62493974}
-  m_LocalPosition: {x: 12.92, y: 6.9400005, z: -0}
+  m_LocalRotation: {x: 0.111387566, y: -0.001652628, z: -0.014742464, w: 0.9936663}
+  m_LocalPosition: {x: 0.45114625, y: 15.200793, z: 27.686361}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 541682683}
+  m_Father: {fileID: 963194228}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &771833146
 GameObject:
@@ -2526,7 +2568,6 @@ GameObject:
   m_Component:
   - component: {fileID: 771833147}
   - component: {fileID: 771833148}
-  - component: {fileID: 771833150}
   - component: {fileID: 771833151}
   m_Layer: 0
   m_Name: DisksMover
@@ -2564,21 +2605,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _disksStorage: {fileID: 1725850291}
   _mapGenerator: {fileID: 1405825712}
-  _cutDownRules: {fileID: 771833150}
   _diskMoveSpeed: 4
---- !u!114 &771833150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 771833146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad7f224e8fb02fe4d8a8a7ba97baa498, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MapGenerator: {fileID: 1405825712}
 --- !u!114 &771833151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2592,7 +2619,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mapGenerator: {fileID: 1405825712}
-  _captureRules: {fileID: 771833150}
   _disksStorage: {fileID: 1725850291}
   _diskMoveSpeed: 4
 --- !u!1001 &790946381
@@ -2963,7 +2989,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerLoginPlace: {fileID: 1246842960}
   _enemyLoginPlace: {fileID: 877126303}
-  _checkersPlayer: {fileID: 541682684}
 --- !u!1001 &852425526
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3221,51 +3246,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 895684849}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 541682683}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &918935239
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 918935241}
-  - component: {fileID: 918935240}
-  m_Layer: 0
-  m_Name: MoveRules
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &918935240
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 918935239}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d776154e4d1ff2249ba58d20dbdcdca9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MapGenerator: {fileID: 1405825712}
---- !u!4 &918935241
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 918935239}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -3638,10 +3618,11 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.25915548, y: 0.6579046, z: -0.25915548, w: 0.6579046}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -17.7, y: 14.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 705507995}
   m_Father: {fileID: 541682683}
   m_LocalEulerAnglesHint: {x: 43, y: 90, z: 0}
 --- !u!114 &963194229
@@ -3656,11 +3637,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6dd781fe9c1a9d42b7975078f2eb380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _checkersMover: {fileID: 771833148}
   _checkersCapturer: {fileID: 771833151}
+  _checkersMover: {fileID: 771833148}
   _disksStorage: {fileID: 1725850291}
-  _moveRules: {fileID: 918935240}
-  _captureRules: {fileID: 771833150}
   _highlighter: {fileID: 895684850}
 --- !u!1001 &1006538673
 PrefabInstance:
@@ -5671,7 +5650,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36869b55b4fb56d42838a4cc62697742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapSquares:
+  _squares:
   - {fileID: 2559878056344239488}
   - {fileID: 2021150082}
   - {fileID: 209380728}
@@ -5764,17 +5743,6 @@ MonoBehaviour:
   - {fileID: 423745691}
   _whiteDisksPositions: 280000002a0000002c0000002e00000031000000330000003500000037000000380000003a0000003c0000003e000000
   _blackDisksPositions: 01000000030000000500000007000000080000000a0000000c0000000e00000011000000130000001500000017000000
-  _checkersPlayer: {fileID: 541682684}
-  _startMapPosition: {x: 8.8, y: 0, z: 8.8}
-  _mapSquarePrefab: {fileID: 288303936788119514, guid: d42ae0455c3836c46b1aeb5271494048, type: 3}
-  _whiteMapSquareMaterial: {fileID: 2100000, guid: 6b72d2ed8e5110f44a46d9b916ae5356, type: 2}
-  _blackMapSquareMaterial: {fileID: 2100000, guid: 9088805fe1a0d744c8eb627f3ee5606d, type: 2}
-  _whiteDiskMaterial: {fileID: 2100000, guid: 9d9284e8cef6cab4fa335b7de82038fa, type: 2}
-  _blackDiskMaterial: {fileID: 2100000, guid: 8a97ff0be4ae1184884306dd73ef62b0, type: 2}
-  _mapSquareAppearingSpeed: 8
-  _diskAppearingSpeed: 8
-  _mapSquareLiftingHeight: 3
-  _diskLiftingHeight: 3
 --- !u!4 &1405825713
 Transform:
   m_ObjectHideFlags: 0
@@ -5947,7 +5915,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1452826111}
   m_Layer: 0
-  m_Name: BlackPlayerPlace
+  m_Name: BlackCameraPlace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5961,13 +5929,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1452826110}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0148347085, y: 0.99988997, z: 0, w: 0}
+  m_LocalRotation: {x: 0.25915548, y: -0.6579046, z: 0.25915548, w: 0.6579046}
   m_LocalPosition: {x: 17.7, y: 14.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 1.7}
+  m_LocalEulerAnglesHint: {x: 43, y: -90, z: 0}
 --- !u!1001 &1459311625
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7972,8 +7940,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95b514796eb3de747bd5be51be740356, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _checkersPlayer: {fileID: 541682684}
-  _blackPlayerPlace: {fileID: 1452826111}
+  _camera: {fileID: 963194227}
+  _blackCameraPlace: {fileID: 1452826111}
 --- !u!4 &1867971532
 Transform:
   m_ObjectHideFlags: 0
@@ -9008,3 +8976,4 @@ SceneRoots:
   - {fileID: 1452826111}
   - {fileID: 1405825713}
   - {fileID: 1725850292}
+  - {fileID: 441590040}

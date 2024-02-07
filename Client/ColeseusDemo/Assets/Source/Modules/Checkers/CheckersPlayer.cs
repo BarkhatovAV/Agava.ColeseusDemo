@@ -1,63 +1,52 @@
 using ColyseusDemo.Multiplayer;
 using System;
-using UnityEngine;
 
 namespace ColyseusDemo.Checkers
 {
-    public class CheckersPlayer : MonoBehaviour
+    public class CheckersPlayer
     {
-        [SerializeField] private CheckersMover _disksMover;
-        [SerializeField] private CheckersCapturer _checkersCapturer;
-        [SerializeField] private Selector _selector;
-
         public bool IsWhitePlayer { get; private set; }
 
         private MultiplayerManager _multiplayerManager;
+        private Selector _selector;
+        private CheckersCapturer _checkersCapturer;
+        private CheckersMover _checkersMover;
         private PlayerSettings _playerSettings;
         private Player _player;
         private Player _enemy;
-        private bool IsTurnReady;
+        private bool _isTurnReady;
 
-        public event Action LoginSet;
         public event Action<string> EnemyFound;
 
         internal event Action<bool> SideDetermined;
 
         public string Login => _playerSettings.Login;
 
-        private void OnEnable()
+        internal CheckersPlayer(MultiplayerManager multiplayerManager, Selector selector, CheckersCapturer checkersCapturer, CheckersMover checkersMover, PlayerSettings playerSettings)
         {
-            _disksMover.MoveMade += SetIsTurnReady;
-            _checkersCapturer.CaptureIsOver += SetIsTurnReady;
-        }
-
-        private void OnDisable()
-        {
-            _disksMover.MoveMade -= SetIsTurnReady;
-            _checkersCapturer.CaptureIsOver -= SetIsTurnReady;
-            _multiplayerManager.EnemyFound -= SetEnemy;
-            _multiplayerManager.PlayerFound -= SetPlayer;
-            _multiplayerManager.DiskMoved -= _disksMover.MoveEnemyDisk;
-            _multiplayerManager.CutDowned -= _checkersCapturer.CapturePlayersDisks;
-        }
-
-        public void Construct(MultiplayerManager multiplayerManager, PlayerSettings playerSettings)
-        {
-            _playerSettings = playerSettings;
-            LoginSet?.Invoke();
-
             _multiplayerManager = multiplayerManager;
+            _selector = selector;
+            _checkersCapturer = checkersCapturer;
+            _checkersMover = checkersMover;
+            _playerSettings = playerSettings;
 
+            SubscribeToEvents();
+        }
+
+        private void SubscribeToEvents()
+        {
             _multiplayerManager.EnemyFound += SetEnemy;
             _multiplayerManager.PlayerFound += SetPlayer;
-            _multiplayerManager.DiskMoved += _disksMover.MoveEnemyDisk;
+            _multiplayerManager.DiskMoved += _checkersMover.MoveEnemyDisk;
             _multiplayerManager.CutDowned += _checkersCapturer.CapturePlayersDisks;
+            _checkersCapturer.CaptureIsOver += SetIsTurnReady;
+            _checkersMover.MoveMade += SetIsTurnReady;
         }
 
         private void SetIsTurnReady()
         {
-            IsTurnReady = !IsTurnReady;
-            _selector.enabled = IsTurnReady;
+            _isTurnReady = !_isTurnReady;
+            _selector.enabled = _isTurnReady;
         }
 
         private void SetEnemy(Player enemy)
@@ -75,7 +64,7 @@ namespace ColyseusDemo.Checkers
         private void SetSide(bool currentValue, bool previousValue)
         {
             IsWhitePlayer = currentValue;
-            IsTurnReady = IsWhitePlayer;
+            _isTurnReady = IsWhitePlayer;
             _player.isWhitePlayer = IsWhitePlayer;
 
             SideDetermined?.Invoke(IsWhitePlayer);

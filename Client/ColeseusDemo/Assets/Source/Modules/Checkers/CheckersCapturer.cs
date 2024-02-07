@@ -7,20 +7,25 @@ using UnityEngine;
 
 namespace ColyseusDemo.Checkers
 {
-    public class CheckersCapturer : MonoBehaviour
+    internal class CheckersCapturer : MonoBehaviour
     {
         private const float PermissibleMovementInaccuracy = 0.03f;
 
         [SerializeField] private MapGenerator _mapGenerator;
-        [SerializeField] private CaptureRules _captureRules;
         [SerializeField] private DisksStorage _disksStorage;
         [SerializeField] private float _diskMoveSpeed;
 
         private CaptureInfo _captureInfo = new CaptureInfo();
+        private CaptureRules _captureRules;
         private Coroutine _moveCoroutine;
 
         internal event Action<List<Square>> CaptureContinue;
         internal event Action CaptureIsOver;
+
+        internal void Construct(CaptureRules captureRules)
+        {
+            _captureRules = captureRules;
+        }
 
         internal void CapturePlayersDisks(string jsonCaptureData)
         {
@@ -66,6 +71,7 @@ namespace ColyseusDemo.Checkers
             if (availableSquares.Count <= 0)
             {
                 SendCutDownMessage(capturingDisk);
+
                 CaptureIsOver?.Invoke();
             }
             else
@@ -120,6 +126,8 @@ namespace ColyseusDemo.Checkers
         {
             _captureInfo.id = capturingDisk.Id;
             MultiplayerManager.Instance.TrySendMessage(MessagesNames.Capture, _captureInfo);
+
+            _captureInfo = new CaptureInfo();
         }
 
         //

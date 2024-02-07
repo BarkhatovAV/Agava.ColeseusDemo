@@ -1,6 +1,5 @@
 using ColyseusDemo.Checkers;
 using ColyseusDemo.Multiplayer;
-using ColyseusDemo.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,7 +13,7 @@ namespace ColyseusDemo.Game
         [SerializeField] private LobbyUI _lobbyUI;
 
         private PlayerSettings _playerSettings;
-        private CheckersPlayer _checkersPlayer;
+        private CheckersRoot _checkersRoot;
 
         private void Awake()
         {
@@ -45,8 +44,8 @@ namespace ColyseusDemo.Game
         {
             _multiplayerManager.FindGame(_playerSettings.Login);
 
-            _checkersPlayer = FindObjectOfType<CheckersPlayer>();
-            _checkersPlayer.Construct(_multiplayerManager, _playerSettings);
+            _checkersRoot = FindObjectOfType<CheckersRoot>();
+            _checkersRoot.Construct(_multiplayerManager, _playerSettings);
         }
     }
 }

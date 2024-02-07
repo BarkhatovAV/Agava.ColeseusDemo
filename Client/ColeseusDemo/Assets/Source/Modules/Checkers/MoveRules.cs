@@ -4,9 +4,11 @@ namespace ColyseusDemo.Checkers
 {
     internal class MoveRules : Rules
     {
+        internal MoveRules(AdjecentSquaresDeltas adjecentSquaresDeltas, MapGenerator mapGenerator) : base(adjecentSquaresDeltas, mapGenerator) { }
+
         internal override List<Square> GetAvailableSquares(Square currentDiskPosition)
         {
-            CurrentDiskPosition = currentDiskPosition;
+            CurrentDiskSquare = currentDiskPosition;
 
             DetermineDeltas();
             FillAvailableSquares();
@@ -30,14 +32,14 @@ namespace ColyseusDemo.Checkers
 
         protected override void FillAvailableSquares()
         {
-            Square availableMapSquare;
+            Square availableSquare;
 
             for (int i = 0; i < WidthDeltas.Count; i++)
             {
-                TryGetAvailableMapSquare(out availableMapSquare, CurrentDiskPosition.WidthPosition + WidthDeltas[i], CurrentDiskPosition.LengthPosition + LengthDeltas[i]);
+                TryGetAvailableMapSquare(out availableSquare, CurrentDiskSquare.WidthPosition + WidthDeltas[i], CurrentDiskSquare.LengthPosition + LengthDeltas[i]);
 
-                if (availableMapSquare != null)
-                    AvailableSquares.Add(availableMapSquare);
+                if (availableSquare != null)
+                    AvailableSquares.Add(availableSquare);
             }
         }
     }
