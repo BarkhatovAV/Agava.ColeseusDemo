@@ -48,6 +48,14 @@ export class StateHandlerRoom extends Room<State> {
                 targetMapWidthPosition: data.targetMapWidthPosition,
                 targetMapLengthPosition: data.targetMapLengthPosition}), {except: client});
         });
+
+        this.onMessage("capture", (client, data) => {
+            this.broadcast("capture", JSON.stringify({
+                sessionID: client.sessionId,
+                id: data.id,
+                widthWayPoints: data.widthWayPoints,
+                lengthWayPoints: data.lengthWayPoints}), {except: client});
+        });
     }
 
     onAuth(client, options, req) {

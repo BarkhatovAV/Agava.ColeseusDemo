@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 823008230093710279}
   - component: {fileID: 8483099306330730792}
   - component: {fileID: 8667056676768464308}
-  - component: {fileID: 560487906610973929}
+  - component: {fileID: 3124547218663738432}
   m_Layer: 0
   m_Name: MapSquare
   m_TagString: Untagged
@@ -107,7 +107,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &560487906610973929
+--- !u!114 &3124547218663738432
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,7 +116,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 288303936788119514}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5212c30b5bcac8544bfceac8034b06a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b8ca0f75a8cdef49ba91c663b833cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _diskPlace: {fileID: 7247712461570654250}

@@ -8,12 +8,12 @@ namespace ColyseusDemo.Checkers
         [SerializeField] private Transform _blackPlayerPlace;
 
         private void OnEnable() =>
-            _checkersPlayer.SideDetermined += SetCamera;
+            _checkersPlayer.SideDetermined += SetCheckersPlayer;
 
         private void OnDisable() =>
-            _checkersPlayer.SideDetermined -= SetCamera;
+            _checkersPlayer.SideDetermined -= SetCheckersPlayer;
 
-        private void SetCamera(bool isWhiteSide)
+        private void SetCheckersPlayer(bool isWhiteSide)
         {
             if (!isWhiteSide)
             {

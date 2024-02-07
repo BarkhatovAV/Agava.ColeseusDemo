@@ -17,7 +17,7 @@ namespace ColyseusDemo.Checkers
             _liftingHeight = liftingHeight;
         }
 
-        internal void PlaceDisk(Disk disk, MapSquare mapSquare, bool isWhiteDisk)
+        internal void PlaceDisk(Disk disk, Square mapSquare, bool isWhiteDisk)
         {
             if (isWhiteDisk)
                 disk.Construct(mapSquare, isWhiteDisk, _whiteDiskMaterial);

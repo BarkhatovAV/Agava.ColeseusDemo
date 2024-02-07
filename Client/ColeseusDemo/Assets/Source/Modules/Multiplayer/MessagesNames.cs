@@ -8,6 +8,7 @@ namespace ColyseusDemo.Multiplayer
     {
         public const string Spawn = "spawn";
         public const string Move = "moved";
+        public const string Capture = "capture";
         public const string Login = "login";
         public const string IsTurnReady = "isTurnReady";
 
@@ -17,6 +18,7 @@ namespace ColyseusDemo.Multiplayer
         private static Dictionary<string, object> MessagesDataExamples = new Dictionary<string, object>()
         {   { Spawn, new Dictionary<string, object>(){} },
             { Move, new MoveInfo()},
+            { Capture, new CaptureInfo()},
             { Login, "string" },
             { IsTurnReady, true },
         };

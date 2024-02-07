@@ -6,191 +6,181 @@ namespace ColyseusDemo.Checkers
     [RequireComponent(typeof(Camera))]
     internal class Selector : MonoBehaviour
     {
-        [SerializeField] private DiskMover _disksMover;
+        [SerializeField] private CheckersCapturer _checkersCapturer;
+        [SerializeField] private CheckersMover _checkersMover;
+        [SerializeField] private CaptureRules _captureRules;
         [SerializeField] private MoveRules _moveRules;
-        [SerializeField] private Material _availableSquareMaterial;
-        [SerializeField] private Material _selectedSquareMaterial;
-        [SerializeField] private Material _takenDiskMaterial;
+        [SerializeField] private DisksStorage _disksStorage;
+        [SerializeField] private Highlighter _highlighter;
 
+        private List<Square> _availableSquares = new List<Square>();
         private Camera _camera;
         private Ray _ray;
         private RaycastHit _raycastHit;
-        private GameObject _selectedObject;
-        private List<MapSquare> _availableSquares = new List<MapSquare>();
-        private MapSquare _highlightedMapSquare;
-        private MapSquare _selectedMapSquare;
+        private GameObject _raycastedObject;
         private Disk _selectedDisk;
+        private Disk _raycastedDisk;
+        private Square _raycastedSquare;
+        private bool _isCaptureMode = false;
+        private bool _isDisk = false;
+        private bool _isSquare = false;
 
         private void Awake() =>
             _camera = GetComponent<Camera>();
 
+        private void OnEnable()
+        {
+            _checkersCapturer.CaptureContinue += ContinueCapture;
+            _checkersCapturer.CaptureIsOver += DisableCaptureMode;
+        }
+
+        private void OnDisable()
+        {
+            _checkersCapturer.CaptureContinue += ContinueCapture;
+            _checkersCapturer.CaptureIsOver -= DisableCaptureMode;
+        }
+
         private void Update()
+        {
+            if (TryCastRay())
+            {
+                _isDisk = _raycastedObject.TryGetComponent<Disk>(out _raycastedDisk);
+                _isSquare = _raycastedObject.TryGetComponent<Square>(out _raycastedSquare);
+
+                if (_isSquare)
+                    TryHighlightSquare(_raycastedSquare);
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    if (_isCaptureMode)
+                        OnCaptureMode();
+                    else
+                        OnMoveMode();
+                }
+            }
+        }
+
+        private void ContinueCapture(List<Square> availableSquares)
+        {
+            _availableSquares = availableSquares;
+            _highlighter.HighlightAvailableSquares(_availableSquares);
+        }
+
+        private void DisableCaptureMode()
+        {
+            _isCaptureMode = false;
+            DropCurrentDisk();
+        }
+
+        private bool TryCastRay()
         {
             _ray = _camera.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(_ray, out _raycastHit))
             {
-                _selectedObject = _raycastHit.collider.gameObject;
+                _raycastedObject = _raycastHit.collider.gameObject;
 
-                if (_selectedObject.TryGetComponent<MapSquare>(out MapSquare mapSquare))
-                    TryHighlightMapSquare(mapSquare);
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    if (_selectedDisk != null)
-                    {
-                        if (_selectedObject.TryGetComponent<MapSquare>(out MapSquare selectedMapSquare))
-                        {
-                            if (TrySelectMapSquare(selectedMapSquare))
-                                _disksMover.MovePlayerDisk(_selectedDisk, _selectedMapSquare);
-
-                            DropSelectedDisk();
-                        }
-                        else if (_selectedObject.TryGetComponent<Disk>(out Disk selectedDisk))
-                        {
-                            TrySelectDisk(selectedDisk);
-                        }
-                        else
-                        {
-                            DropSelectedDisk();
-                        }
-                    }
-                    else
-                    {
-                        if (_selectedObject.TryGetComponent<Disk>(out Disk selectedDisk))
-                            TrySelectDisk(selectedDisk);
-                    }
-                }
+                return true;
             }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void OnCaptureMode()
+        {
+            if (_isSquare && _selectedDisk != null)
+                TrySelectSquare(_raycastedSquare);
+        }
+
+        private void OnMoveMode()
+        {
+            if (_isSquare && _selectedDisk != null)
+            {
+                TrySelectSquare(_raycastedSquare);
+                DropCurrentDisk();
+            }
+            else if (_isDisk)
+            {
+                TrySelectDisk(_raycastedDisk);
+            }
+        }
+
+        private void TryHighlightSquare(Square selectedSquare)
+        {
+            if (IsCorrectSquare(selectedSquare))
+                _highlighter.HighlightSquare(selectedSquare);
+            else
+                _highlighter.UnhighlightSquare();
         }
 
         private bool TrySelectDisk(Disk selectedDisk)
         {
-            bool isCorrectDisk = _disksMover.IsCorrectDisk(selectedDisk);
+            bool isCorrectDisk = _disksStorage.IsCorrectDisk(selectedDisk);
 
             if (isCorrectDisk)
             {
                 if (_selectedDisk != selectedDisk && _selectedDisk != null)
-                    DropSelectedDisk();
+                    DropCurrentDisk();
 
                 SelectDisk(selectedDisk);
-
-                return true;
             }
+
+            return isCorrectDisk;
+        }
+
+        private void SelectDisk(Disk selectedDisk)
+        {
+            _selectedDisk = selectedDisk;
+            _highlighter.HighlightDisk(_selectedDisk);
+
+            _availableSquares = _captureRules.GetAvailableSquares(selectedDisk.CurrentSquare);
+
+            if (_availableSquares.Count == 0)
+                _availableSquares = _moveRules.GetAvailableSquares(selectedDisk.CurrentSquare);
             else
+                _isCaptureMode = true;
+
+            _highlighter.HighlightAvailableSquares(_availableSquares);
+        }
+
+        private bool TrySelectSquare(Square selectedSquare)
+        {
+            bool isCorrectSquare = IsCorrectSquare(selectedSquare);
+
+            if (isCorrectSquare)
             {
-                if (_selectedDisk != null)
+                if (_captureRules.IsCutDown(_selectedDisk, selectedSquare))
                 {
-                    UnhighlightDisk(_selectedDisk);
-                    _selectedDisk = null;
+                    ClearAvailableSquares();
+                    _checkersCapturer.CaptureEnemyDisk(_selectedDisk, selectedSquare);
                 }
-
-                return false;
+                else
+                {
+                    _checkersMover.MovePlayerDisk(_selectedDisk, selectedSquare);
+                }
             }
+
+            return isCorrectSquare;
         }
 
-        private void SelectDisk(Disk disk)
-        {
-            _selectedDisk = disk;
-            HighlightDisk(_selectedDisk);
+        private bool IsCorrectSquare(Square square) =>
+            _availableSquares.Contains(square);
 
-            _availableSquares = _moveRules.GetAvailableSquares(disk.CurrentMapSquare);
-            HighlightAvailableSquares();
-        }
-
-        private void DropSelectedDisk()
+        private void DropCurrentDisk()
         {
-            UnhighlightAvailableSquares();
+            ClearAvailableSquares();
 
             if (_selectedDisk != null)
-                UnhighlightDisk(_selectedDisk);
+                _highlighter.UnhighlightDisk();
 
             _selectedDisk = null;
         }
 
-        private void HighlightDisk(Disk selectedDisk)
+        private void ClearAvailableSquares()
         {
-            if (selectedDisk.gameObject.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-                renderer.material = _takenDiskMaterial;
-        }
-
-        private void UnhighlightDisk(Disk selectedDisk)
-        {
-            if (selectedDisk.gameObject.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-                renderer.material = selectedDisk.DefaultMaterial;
-        }
-
-        private bool TrySelectMapSquare(MapSquare mapSquare)
-        {
-            bool isCorrectMapSquare = _availableSquares.Contains(mapSquare);
-
-            if (isCorrectMapSquare)
-            {
-                _selectedMapSquare = mapSquare;
-                _highlightedMapSquare = null;
-                UnhighlightAvailableSquares();
-            }
-            else
-            {
-                DropSelectedDisk();
-            }
-
-            return isCorrectMapSquare;
-        }
-
-        private bool TryHighlightMapSquare(MapSquare mapSquare)
-        {
-            if (_availableSquares.Contains(mapSquare))
-            {
-                _highlightedMapSquare = mapSquare;
-                HighlightMapSquare(_highlightedMapSquare);
-
-                return true;
-            }
-            else
-            {
-                if (_highlightedMapSquare != null)
-                {
-                    UnhighlightMapSquare();
-                    _highlightedMapSquare = null;
-                }
-
-                return false;
-            }
-        }
-
-        private void HighlightMapSquare(MapSquare mapSquare)
-        {
-            if (mapSquare.gameObject.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-                renderer.material = _selectedSquareMaterial;
-        }
-
-        private void UnhighlightMapSquare()
-        {
-            if (_highlightedMapSquare != null)
-            {
-                if (_highlightedMapSquare.gameObject.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-                    renderer.material = _availableSquareMaterial;
-            }
-        }
-
-        private void HighlightAvailableSquares()
-        {
-            foreach (MapSquare square in _availableSquares)
-            {
-                if (square.gameObject.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-                    renderer.material = _availableSquareMaterial;
-            }
-        }
-
-        private void UnhighlightAvailableSquares()
-        {
-            foreach (MapSquare square in _availableSquares)
-            {
-                if (square.gameObject.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-                    renderer.material = square.DefaultMaterial;
-            }
-
+            _highlighter.UnhighlightAvailableSquares();
             _availableSquares.Clear();
         }
     }

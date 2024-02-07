@@ -1,118 +1,44 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ColyseusDemo.Checkers
 {
-    internal class MoveRules : MonoBehaviour
+    internal class MoveRules : Rules
     {
-        private const string RightDirectionName = "right";
-        private const string LeftDirectionName = "left";
-
-        private const int WhiteLeftWidthIndicator = -1;
-        private const int WhiteLeftLengthIndicator = 1;
-        private const int WhiteRightWidthIndicator = -1;
-        private const int WhiteRightLengthIndicator = -1;
-
-        [SerializeField] private MapGenerator _mapGenerator;
-
-        private MapSquare _questionDiskPosition;
-
-        private bool _isWhiteDisk => _questionDiskPosition.IsWhiteOccupied;
-
-        internal List<MapSquare> GetAvailableSquares(MapSquare questionDiskPosition)
+        internal override List<Square> GetAvailableSquares(Square currentDiskPosition)
         {
-            _questionDiskPosition = questionDiskPosition;
+            CurrentDiskPosition = currentDiskPosition;
 
-            List<MapSquare> availableSquares = new List<MapSquare>();
-            MapSquare tempMapSquare;
+            DetermineDeltas();
+            FillAvailableSquares();
 
-            if (TryGetAdjacentSquare(out tempMapSquare, RightDirectionName))
-                availableSquares.Add(tempMapSquare);
-
-            if (TryGetAdjacentSquare(out tempMapSquare, LeftDirectionName))
-                availableSquares.Add(tempMapSquare);
-
-            return availableSquares;
+            return AvailableSquares;
         }
 
-        private bool TryGetAdjacentSquare(out MapSquare adjacentSquare, string directionName)
+        protected override void DetermineDeltas()
         {
-            int directionIndicator;
-            int widthPosition = -1;
-            int lengthPosition = -1;
-
-            if (_isWhiteDisk)
-                directionIndicator = 1;
-            else
-                directionIndicator = -1;
-
-            if (directionName == RightDirectionName)
+            if (IsCurrentDiskWhite)
             {
-                widthPosition = _questionDiskPosition.WidthPosition + WhiteRightWidthIndicator * directionIndicator;
-                lengthPosition = _questionDiskPosition.LengthPosition + WhiteRightLengthIndicator * directionIndicator;
-            }
-            else if (directionName == LeftDirectionName)
-            {
-                widthPosition = _questionDiskPosition.WidthPosition + WhiteLeftWidthIndicator * directionIndicator;
-                lengthPosition = _questionDiskPosition.LengthPosition + WhiteLeftLengthIndicator * directionIndicator;
-            }
-
-            if (IsMapSquareExist(widthPosition, lengthPosition))
-            {
-                MapSquare mapSquare = _mapGenerator.GetMapSquare(widthPosition, lengthPosition);
-
-                if (mapSquare.IsOccupied)
-                {
-                    TryCutDown(mapSquare, out adjacentSquare);
-                }
-                else
-                {
-                    adjacentSquare = mapSquare;
-                }
+                WidthDeltas = AdjecentSquaresDeltas.WhiteWidthDeltas;
+                LengthDeltas = AdjecentSquaresDeltas.WhiteLengthDeltas;
             }
             else
             {
-                adjacentSquare = null;
+                WidthDeltas = AdjecentSquaresDeltas.BlackWidthDeltas;
+                LengthDeltas = AdjecentSquaresDeltas.BlackLengthDeltas;
             }
-
-            return adjacentSquare != null;
         }
 
-        private bool IsMapSquareExist(int widthPosition, int lengthPosition) =>
-            widthPosition >= 0 && lengthPosition >= 0 && widthPosition < 8 && lengthPosition < 8;
-
-        private bool TryCutDown(MapSquare occupiedMapSquare, out MapSquare adjacentSquare)
+        protected override void FillAvailableSquares()
         {
-            int questionDiskWidth = _questionDiskPosition.WidthPosition;
-            int questionDiskLength = _questionDiskPosition.LengthPosition;
-            int occupiedMapSquareWidth = occupiedMapSquare.WidthPosition;
-            int occupiedMapSquareLength = occupiedMapSquare.LengthPosition;
+            Square availableMapSquare;
 
-            int adjacentSquareWidth = questionDiskWidth + (occupiedMapSquareWidth - questionDiskWidth) * 2;
-            int adjacentSquareLength = questionDiskLength + (occupiedMapSquareLength - questionDiskLength) * 2;
-
-            if (IsMapSquareExist(adjacentSquareWidth, adjacentSquareLength))
+            for (int i = 0; i < WidthDeltas.Count; i++)
             {
-                MapSquare checkedSquare = _mapGenerator.GetMapSquare(adjacentSquareWidth, adjacentSquareLength);
+                TryGetAvailableMapSquare(out availableMapSquare, CurrentDiskPosition.WidthPosition + WidthDeltas[i], CurrentDiskPosition.LengthPosition + LengthDeltas[i]);
 
-                if (checkedSquare.IsOccupied)
-                {
-                    adjacentSquare = null;
-                }
-                else
-                {
-                    if (_isWhiteDisk == occupiedMapSquare.IsWhiteOccupied)
-                        adjacentSquare = null;
-                    else
-                        adjacentSquare = checkedSquare;
-                }
+                if (availableMapSquare != null)
+                    AvailableSquares.Add(availableMapSquare);
             }
-            else
-            {
-                adjacentSquare = null;
-            }
-
-            return adjacentSquare != null;
         }
     }
 }

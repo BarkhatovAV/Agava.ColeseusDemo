@@ -6,7 +6,8 @@ namespace ColyseusDemo.Checkers
 {
     public class CheckersPlayer : MonoBehaviour
     {
-        [SerializeField] private DiskMover _disksMover;
+        [SerializeField] private CheckersMover _disksMover;
+        [SerializeField] private CheckersCapturer _checkersCapturer;
         [SerializeField] private Selector _selector;
 
         public bool IsWhitePlayer { get; private set; }
@@ -24,15 +25,20 @@ namespace ColyseusDemo.Checkers
 
         public string Login => _playerSettings.Login;
 
-        private void OnEnable() =>
+        private void OnEnable()
+        {
             _disksMover.MoveMade += SetIsTurnReady;
+            _checkersCapturer.CaptureIsOver += SetIsTurnReady;
+        }
 
         private void OnDisable()
         {
             _disksMover.MoveMade -= SetIsTurnReady;
+            _checkersCapturer.CaptureIsOver -= SetIsTurnReady;
             _multiplayerManager.EnemyFound -= SetEnemy;
             _multiplayerManager.PlayerFound -= SetPlayer;
             _multiplayerManager.DiskMoved -= _disksMover.MoveEnemyDisk;
+            _multiplayerManager.CutDowned -= _checkersCapturer.CapturePlayersDisks;
         }
 
         public void Construct(MultiplayerManager multiplayerManager, PlayerSettings playerSettings)
@@ -45,6 +51,7 @@ namespace ColyseusDemo.Checkers
             _multiplayerManager.EnemyFound += SetEnemy;
             _multiplayerManager.PlayerFound += SetPlayer;
             _multiplayerManager.DiskMoved += _disksMover.MoveEnemyDisk;
+            _multiplayerManager.CutDowned += _checkersCapturer.CapturePlayersDisks;
         }
 
         private void SetIsTurnReady()
@@ -73,8 +80,6 @@ namespace ColyseusDemo.Checkers
 
             SideDetermined?.Invoke(IsWhitePlayer);
             _selector.enabled = IsWhitePlayer;
-
-            Debug.Log("Ваша сторона белая: " + IsWhitePlayer);
         }
     }
 }

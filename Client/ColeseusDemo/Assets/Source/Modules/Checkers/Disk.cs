@@ -6,7 +6,7 @@ namespace ColyseusDemo.Checkers
     [RequireComponent(typeof(Renderer))]
     internal class Disk : MonoBehaviour
     {
-        internal MapSquare CurrentMapSquare { get; private set; }
+        internal Square CurrentSquare { get; private set; }
         internal bool IsWhite { get; private set; }
         internal int Id { get; private set; }
         internal int WidthPosition { get; private set; }
@@ -15,9 +15,9 @@ namespace ColyseusDemo.Checkers
 
         private Coroutine _coroutine;
 
-        internal void Construct(MapSquare currentMapSquare, bool isWhite, Material material)
+        internal void Construct(Square currentMapSquare, bool isWhite, Material material)
         {
-            CurrentMapSquare = currentMapSquare;
+            CurrentSquare = currentMapSquare;
             IsWhite = isWhite;
             DefaultMaterial = material;
 
@@ -25,9 +25,9 @@ namespace ColyseusDemo.Checkers
             SetCurrentMapSquare(currentMapSquare);
         }
 
-        internal void SetCurrentMapSquare(MapSquare currentMapSquare)
+        internal void SetCurrentMapSquare(Square currentMapSquare)
         {
-            CurrentMapSquare = currentMapSquare;
+            CurrentSquare = currentMapSquare;
 
             WidthPosition = currentMapSquare.WidthPosition;
             LengthPosition = currentMapSquare.LengthPosition;

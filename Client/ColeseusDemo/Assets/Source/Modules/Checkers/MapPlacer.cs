@@ -38,7 +38,7 @@ namespace ColyseusDemo.Checkers
             DetermineDeltas();
         }
 
-        internal void PlaceMapSquare(MapSquare mapSquare)
+        internal void PlaceMapSquare(Square mapSquare)
         {
             if (_placedSquaresCount % EvenNumbersDevisor == 0)
                 mapSquare.SetDefaultMaterial(_firstMapSquareMaterial);

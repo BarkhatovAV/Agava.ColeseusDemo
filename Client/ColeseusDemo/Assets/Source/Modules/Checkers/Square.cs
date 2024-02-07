@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ColyseusDemo.Checkers
 {
     [RequireComponent(typeof(Renderer))]
-    internal class MapSquare : MonoBehaviour
+    internal class Square : MonoBehaviour
     {
         internal bool IsOccupied { get; private set; } = false;
         internal bool IsWhiteOccupied { get; private set; } = false;
@@ -43,6 +43,16 @@ namespace ColyseusDemo.Checkers
             IsBlackOccupied = false;
         }
 
+        internal Vector3 GetTargetPosition(Transform movableObject)
+        {
+            float targetXPosition = DiskPlace.x;
+            float targetZPosition = DiskPlace.z;
+            Vector3 currentPosition = movableObject.position;
+
+            return new Vector3(targetXPosition, currentPosition.y, targetZPosition);
+        }
+
+        //»збавитьс€, использу€ DotWeen
         internal void SmoothlyMove(Transform movableObject, Vector3 target, float moveSpeed) =>
             StartCoroutine(FloatDown(movableObject, target, moveSpeed));
 
@@ -57,6 +67,7 @@ namespace ColyseusDemo.Checkers
 
             movableObject.position = target;
         }
+        //
 
         private void SetMaterial(Material material) =>
             GetComponent<Renderer>().material = material;

@@ -12,6 +12,7 @@ namespace ColyseusDemo.Multiplayer
         public event Action<Player> EnemyFound;
         public event Action<Player> PlayerFound;
         public event Action<string> DiskMoved;
+        public event Action<string> CutDowned;
 
         public string ClientID => _room == null ? "" : _room.SessionId;
         public string SessionId => _room.SessionId;
@@ -53,6 +54,7 @@ namespace ColyseusDemo.Multiplayer
         private void SubscribeMessages()
         {
             _room.OnMessage<string>(MessagesNames.Move, jsonMovedData => DiskMoved?.Invoke(jsonMovedData));
+            _room.OnMessage<string>(MessagesNames.Capture, jsonCutDownData => CutDowned?.Invoke(jsonCutDownData));
 
             //_room.OnJoin += OnRoomJoined;
             _room.OnStateChange += OnStateChanged;
