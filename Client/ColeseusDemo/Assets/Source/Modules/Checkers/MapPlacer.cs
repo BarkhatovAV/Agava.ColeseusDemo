@@ -18,18 +18,16 @@ namespace ColyseusDemo.Checkers
         private Vector3 _widthDeltaVector;
         private Vector3 _lengthDeltaVector;
         private int _placedSquaresCount = 0;
-        private float _appearingSpeed = 8f;
         private float _liftingHeight;
 
-        internal MapPlacer(int mapWidth, Vector3 startMapPosition, GameObject mapSquarePrefab, Material whiteMapSquareMaterial, Material blackMapSquareMaterial, float moveSpeed, float liftingHeight)
+        internal MapPlacer(int mapWidth, Vector3 startMapPosition, GameObject squarePrefab, Material whiteSquareMaterial, Material blackSquareMaterial, float liftingHeight)
         {
             _mapWidth = mapWidth;
             _startMapPosition = startMapPosition;
-            _mapSquarePrefab = mapSquarePrefab;
-            _whiteMapSquareMaterial = whiteMapSquareMaterial;
-            _blackMapSquareMaterial = blackMapSquareMaterial;
+            _mapSquarePrefab = squarePrefab;
+            _whiteMapSquareMaterial = whiteSquareMaterial;
+            _blackMapSquareMaterial = blackSquareMaterial;
             _currentPosition = startMapPosition;
-            _appearingSpeed = moveSpeed;
             _liftingHeight = liftingHeight;
 
             _firstMapSquareMaterial = _whiteMapSquareMaterial;
@@ -38,19 +36,19 @@ namespace ColyseusDemo.Checkers
             DetermineDeltas();
         }
 
-        internal void PlaceMapSquare(Square mapSquare)
+        internal void PlaceSquare(Square square)
         {
             if (_placedSquaresCount % EvenNumbersDevisor == 0)
-                mapSquare.SetDefaultMaterial(_firstMapSquareMaterial);
+                square.SetDefaultMaterial(_firstMapSquareMaterial);
             else
-                mapSquare.SetDefaultMaterial(_secondMapSquareMaterial);
+                square.SetDefaultMaterial(_secondMapSquareMaterial);
 
             Vector3 startMapSquarePosition = new Vector3(_currentPosition.x, _currentPosition.y + _liftingHeight, _currentPosition.z);
-            Transform mapSquareTransform = mapSquare.transform;
+            Transform mapSquareTransform = square.transform;
             mapSquareTransform.position = startMapSquarePosition;
-            mapSquare.gameObject.SetActive(true);
+            square.gameObject.SetActive(true);
 
-            mapSquare.SmoothlyMove(mapSquareTransform, _currentPosition, _appearingSpeed);
+            square.FloatDown(_currentPosition);
 
             _placedSquaresCount++;
 

@@ -1,4 +1,4 @@
-using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 
 namespace ColyseusDemo.Checkers
@@ -6,6 +6,8 @@ namespace ColyseusDemo.Checkers
     [RequireComponent(typeof(Renderer))]
     internal class Disk : MonoBehaviour
     {
+        private const int JumpsCount = 1;
+
         internal Square CurrentSquare { get; private set; }
         internal bool IsWhite { get; private set; }
         internal int Id { get; private set; }
@@ -13,19 +15,22 @@ namespace ColyseusDemo.Checkers
         internal int LengthPosition { get; private set; }
         internal Material DefaultMaterial { get; private set; }
 
-        private Coroutine _coroutine;
+        [SerializeField] private float _floatDownDuration;
+        [SerializeField] private float _moveDuration;
+        [SerializeField] float _jumpDuration;
+        [SerializeField] float _jumpPower;
 
-        internal void Construct(Square currentMapSquare, bool isWhite, Material material)
+        internal void Construct(Square currentSquare, bool isWhite, Material material)
         {
-            CurrentSquare = currentMapSquare;
+            CurrentSquare = currentSquare;
             IsWhite = isWhite;
             DefaultMaterial = material;
 
             SetMaterial(material);
-            SetCurrentMapSquare(currentMapSquare);
+            SetCurrentSquare(currentSquare);
         }
 
-        internal void SetCurrentMapSquare(Square currentMapSquare)
+        internal void SetCurrentSquare(Square currentMapSquare)
         {
             CurrentSquare = currentMapSquare;
 
@@ -34,22 +39,26 @@ namespace ColyseusDemo.Checkers
             currentMapSquare.Occupy(IsWhite);
         }
 
-        internal void SmoothlyMove(Transform movableObject, Vector3 target, float moveSpeed) =>
-            StartCoroutine(FloatDown(movableObject, target, moveSpeed));
-
         internal void SetId(int id) =>
             Id = id;
 
-        private IEnumerator FloatDown(Transform movableObject, Vector3 target, float moveSpeed)
+        internal void FloatDown(Vector3 target)
         {
-            while (movableObject.position.y > target.y + 0.05f)
-            {
-                movableObject.position = Vector3.Lerp(movableObject.position, target, moveSpeed * Time.deltaTime);
+            transform.DOMove(target, _floatDownDuration)
+                .SetEase(Ease.InQuad);
+        }
 
-                yield return null;
-            }
+        internal void MoveTo(Vector3 target)
+        {
+            transform.DOMove(target, _moveDuration)
+                .SetEase(Ease.InQuad);
 
-            movableObject.position = target;
+        }
+
+        internal void JumpTo(Vector3 target)
+        {
+            transform.DOJump(target, _jumpPower, JumpsCount, _jumpDuration)
+                .SetEase(Ease.InQuad);
         }
 
         private void SetMaterial(Material material) =>

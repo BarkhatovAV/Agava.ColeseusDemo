@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _diskPlace: {fileID: 7247712461570654250}
+  _floatDownDuration: 0.35
 --- !u!1 &5359645939494147824
 GameObject:
   m_ObjectHideFlags: 0

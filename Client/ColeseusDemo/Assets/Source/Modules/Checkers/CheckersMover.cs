@@ -1,21 +1,17 @@
 using ColyseusDemo.Multiplayer;
 using ColyseusDemo.SendTypes;
 using System;
-using System.Collections;
 using UnityEngine;
 
 namespace ColyseusDemo.Checkers
 {
     internal class CheckersMover : MonoBehaviour
     {
-        private const float PermissibleMovementInaccuracy = 0.01f;
-
         [SerializeField] private DisksStorage _disksStorage;
         [SerializeField] private MapGenerator _mapGenerator;
         [SerializeField] private float _diskMoveSpeed;
 
         private MoveInfo _moveInfo = new MoveInfo();
-        private Coroutine _moveCoroutine;
 
         internal event Action MoveMade;
 
@@ -50,17 +46,9 @@ namespace ColyseusDemo.Checkers
             Vector3 targetPosition = targetSquare.GetTargetPosition(diskTransform);
 
             _mapGenerator.SetNewDiskPlanPosition(disk, targetSquare);
-            ShowMove(diskTransform, targetPosition);
+            disk.MoveTo(targetPosition);
 
             MoveMade?.Invoke();
-        }
-
-        private void ShowMove(Transform diskTransform, Vector3 targetPosition)
-        {
-            if (_moveCoroutine != null)
-                StopCoroutine(_moveCoroutine);
-
-            _moveCoroutine = StartCoroutine(SmoothlyMove(diskTransform, targetPosition));
         }
 
         private void SendMoveMessage(Disk movingDisk, Square targetMapSquare)
@@ -74,18 +62,6 @@ namespace ColyseusDemo.Checkers
             _moveInfo.id = movingDisk.Id;
             _moveInfo.targetMapWidthPosition = targetSquare.WidthPosition;
             _moveInfo.targetMapLengthPosition = targetSquare.LengthPosition;
-        }
-
-        private IEnumerator SmoothlyMove(Transform diskTransform, Vector3 target)
-        {
-            float distance = (diskTransform.position - target).sqrMagnitude;
-
-            while (distance > PermissibleMovementInaccuracy)
-            {
-                diskTransform.position = Vector3.Lerp(diskTransform.position, target, _diskMoveSpeed * Time.deltaTime);
-
-                yield return null;
-            }
         }
     }
 }

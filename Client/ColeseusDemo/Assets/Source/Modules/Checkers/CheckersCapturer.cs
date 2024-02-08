@@ -1,7 +1,6 @@
 using ColyseusDemo.Multiplayer;
 using ColyseusDemo.SendTypes;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,15 +8,12 @@ namespace ColyseusDemo.Checkers
 {
     internal class CheckersCapturer : MonoBehaviour
     {
-        private const float PermissibleMovementInaccuracy = 0.03f;
-
         [SerializeField] private MapGenerator _mapGenerator;
         [SerializeField] private DisksStorage _disksStorage;
         [SerializeField] private float _diskMoveSpeed;
 
         private CaptureInfo _captureInfo = new CaptureInfo();
         private CaptureRules _captureRules;
-        private Coroutine _moveCoroutine;
 
         internal event Action<List<Square>> CaptureContinue;
         internal event Action CaptureIsOver;
@@ -82,7 +78,7 @@ namespace ColyseusDemo.Checkers
 
         private void Capture(Disk capturingDisk, Square targetSquare)
         {
-            ShowMove(capturingDisk, targetSquare);
+            capturingDisk.JumpTo(targetSquare.DiskPlace);
 
             if (TryGetEnemyDisk(out Disk enemyDisk, capturingDisk.CurrentSquare, targetSquare))
                 DisableDisk(enemyDisk);
@@ -115,7 +111,6 @@ namespace ColyseusDemo.Checkers
             return enemyDisk != null;
         }
 
-        //Перенести в класс для сообщений
         private void AddWayPoint(int widthPosition, int lengthPosition)
         {
             _captureInfo.widthWayPoints.Add(widthPosition);
@@ -129,32 +124,5 @@ namespace ColyseusDemo.Checkers
 
             _captureInfo = new CaptureInfo();
         }
-
-        //
-
-        //Избавиться, использую DoTween
-        private void ShowMove(Disk disk, Square targetSquare)
-        {
-            Transform diskTransform = disk.gameObject.transform;
-            Vector3 targetPosition = targetSquare.DiskPlace;
-
-            if (_moveCoroutine != null)
-                StopCoroutine(_moveCoroutine);
-
-            _moveCoroutine = StartCoroutine(SmoothlyMove(diskTransform, targetPosition));
-        }
-
-        private IEnumerator SmoothlyMove(Transform diskTransform, Vector3 target)
-        {
-            float distance = (diskTransform.position - target).sqrMagnitude;
-
-            while (distance > PermissibleMovementInaccuracy)
-            {
-                diskTransform.position = Vector3.Lerp(diskTransform.position, target, _diskMoveSpeed * Time.deltaTime);
-
-                yield return null;
-            }
-        }
-        ///
     }
 }

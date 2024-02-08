@@ -77,7 +77,7 @@ namespace ColyseusDemo.Checkers
             FreeSquare(disk.CurrentSquare);
             _disksPlan[targetSquare.WidthPosition, targetSquare.LengthPosition] = disk;
 
-            disk.SetCurrentMapSquare(targetSquare);
+            disk.SetCurrentSquare(targetSquare);
             targetSquare.Occupy(disk.IsWhite);
         }
 
@@ -109,7 +109,7 @@ namespace ColyseusDemo.Checkers
 
                     tempSquare.Construct(i, j);
                     _mapPlan[i, j] = tempSquare;
-                    _mapPlacer.PlaceMapSquare(tempSquare);
+                    _mapPlacer.PlaceSquare(tempSquare);
 
                     squareCount++;
 

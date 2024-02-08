@@ -17,8 +17,6 @@ namespace ColyseusDemo.Checkers
         [SerializeField] private Material _whiteDiskMaterial;
         [SerializeField] private Material _blackDiskMaterial;
 
-        [SerializeField] private float _squareAppearingSpeed = 8f;
-        [SerializeField] private float _diskAppearingSpeed = 8f;
         [SerializeField] private float _squareLiftingHeight = 3f;
         [SerializeField] private float _diskLiftingHeight = 3f;
 
@@ -45,8 +43,8 @@ namespace ColyseusDemo.Checkers
             _captureRules = new CaptureRules(_adjecentSquaresDeltas, _mapGenerator);
             _moveRules = new MoveRules(_adjecentSquaresDeltas, _mapGenerator);
 
-            _mapPlacer = new MapPlacer(MapGenerator.MapWidth, _startMapPosition, _squarePrefab, _whiteSquareMaterial, _blackSquareMaterial, _squareAppearingSpeed, _squareLiftingHeight);
-            _diskPlacer = new DiskPlacer(_whiteDiskMaterial, _blackDiskMaterial, _diskAppearingSpeed, _diskLiftingHeight);
+            _mapPlacer = new MapPlacer(MapGenerator.MapWidth, _startMapPosition, _squarePrefab, _whiteSquareMaterial, _blackSquareMaterial, _squareLiftingHeight);
+            _diskPlacer = new DiskPlacer(_whiteDiskMaterial, _blackDiskMaterial, _diskLiftingHeight);
 
             _selector.Construct(_captureRules, _moveRules);
             _mapGenerator.Construct(_checkersPlayer, _mapPlacer, _diskPlacer);
