@@ -13,6 +13,7 @@ namespace ColyseusDemo.Multiplayer
         public event Action<Player> PlayerFound;
         public event Action<string> DiskMoved;
         public event Action<string> CutDowned;
+        public event Action<string> RoomFound;
 
         public string ClientID => _room == null ? "" : _room.SessionId;
         public string SessionId => _room.SessionId;
@@ -21,6 +22,12 @@ namespace ColyseusDemo.Multiplayer
         {
             InitializeClient();
             ConnectClient(login);
+        }
+
+        public void FindGameByID(string login, string sessionId)
+        {
+            InitializeClient();
+            ConnectClient(login, sessionId);
         }
 
         public bool TrySendMessage(string key, object message)
@@ -47,6 +54,20 @@ namespace ColyseusDemo.Multiplayer
             };
 
             _room = await client.JoinOrCreate<State>(StatesNames.GameRoomName, data);
+            RoomFound?.Invoke(SessionId);
+
+            SubscribeMessages();
+        }
+
+        private async void ConnectClient(string playerLogin, string sessionId)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>()
+            {
+                {MessagesNames.Login, playerLogin }
+            };
+
+            _room = await client.JoinById<State>(sessionId);
+            RoomFound?.Invoke(SessionId);
 
             SubscribeMessages();
         }

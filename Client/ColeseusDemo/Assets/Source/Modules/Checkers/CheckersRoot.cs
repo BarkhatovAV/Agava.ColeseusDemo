@@ -50,7 +50,7 @@ namespace ColyseusDemo.Checkers
             _mapGenerator.Construct(_checkersPlayer, _mapPlacer, _diskPlacer);
             _checkersCapturer.Construct(_captureRules);
             _cameraSetter.Construct(_checkersPlayer);
-            _gameUI.Construct(_checkersPlayer);
+            _gameUI.Construct(_checkersPlayer, _multiplayerManager);
         }
     }
 }

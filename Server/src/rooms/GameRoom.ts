@@ -33,7 +33,7 @@ export class State extends Schema {
     }
 }
 
-export class StateHandlerRoom extends Room<State> {
+export class GameRoom extends Room<State> {
     maxClients = 2;
 
     onCreate (options) {
