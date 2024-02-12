@@ -2151,7 +2151,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1671792349}
-  - component: {fileID: 1671792348}
+  - component: {fileID: 1671792350}
   m_Layer: 0
   m_Name: MultiplayerManager
   m_TagString: Untagged
@@ -2159,19 +2159,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1671792348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1671792347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2f6e8bd9cfcdc54d8716e804e917266, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _colyseusSettings: {fileID: 11400000, guid: 85b1056ebbb4a6841870afd7881b07c2, type: 2}
 --- !u!4 &1671792349
 Transform:
   m_ObjectHideFlags: 0
@@ -2187,6 +2174,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2055966330}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1671792350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1671792347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 120a34c81cb179a4b9ca760478a002a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colyseusSettings: {fileID: 11400000, guid: 85b1056ebbb4a6841870afd7881b07c2, type: 2}
 --- !u!1 &1690406042
 GameObject:
   m_ObjectHideFlags: 0
@@ -2795,7 +2795,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b5ea34f0452b1b4a83663edb472134b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _multiplayerManager: {fileID: 1671792348}
+  _multiplayerManager: {fileID: 1671792350}
   _lobbyUI: {fileID: 878914187}
 --- !u!4 &2055966330
 Transform:
