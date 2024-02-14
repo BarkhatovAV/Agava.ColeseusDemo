@@ -7,6 +7,8 @@ export class Player extends Schema {
 }
 
 export class State extends Schema {
+    maxClientsCount = 2;
+
     @type({ map: Player }) players = new MapSchema<Player>();
     @type([ "string" ]) playersId = new ArraySchema<string>();
 
@@ -26,7 +28,7 @@ export class State extends Schema {
         const playersSchema = this.players;
         const playersId = this.playersId;
 
-        if(playersSchema.size == 2){
+        if(playersSchema.size == this.maxClientsCount){
             playersSchema.get(playersId[0]).isWhitePlayer = false;
             playersSchema.get(playersId[1]).isWhitePlayer = true;
         }
@@ -37,7 +39,7 @@ export class GameRoom extends Room<State> {
     maxClients = 2;
 
     onCreate (options) {
-        console.log("StateHandlerRoom created!", options);
+        console.log("GameRoom created!", options);
 
         this.setState(new State());
 
@@ -58,10 +60,6 @@ export class GameRoom extends Room<State> {
         });
     }
 
-    onAuth(client, options, req) {
-        return true;
-    }
-
     onJoin (client: Client, data) {
         this.state.createPlayer(client.sessionId, data.login);
         this.state.TrySetSides();
@@ -70,11 +68,6 @@ export class GameRoom extends Room<State> {
     }
 
     onLeave (client) {
-        console.log(client.sessionId, "left!");
         this.state.removePlayer(client.sessionId);
-    }
-
-    onDispose () {
-        console.log("Dispose StateHandlerRoom");
     }
 }

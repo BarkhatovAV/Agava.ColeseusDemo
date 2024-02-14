@@ -24,6 +24,12 @@ namespace ColyseusDemo.Multiplayer
             ConnectClient(login);
         }
 
+        public void FindGame(string login, string id)
+        {
+            InitializeClient();
+            ConnectClientById(login, id);
+        }
+
         public void FindGameByID(string login, string sessionId)
         {
             InitializeClient();
@@ -54,6 +60,19 @@ namespace ColyseusDemo.Multiplayer
             };
 
             _room = await client.JoinOrCreate<State>(StatesNames.GameRoomName, data);
+            RoomFound?.Invoke(SessionId);
+
+            SubscribeMessages();
+        }
+
+        private async void ConnectClientById(string playerLogin, string id)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>()
+            {
+                {MessagesNames.Login, playerLogin }
+            };
+
+            _room = await client.JoinById<State>(id, data);
             RoomFound?.Invoke(SessionId);
 
             SubscribeMessages();
